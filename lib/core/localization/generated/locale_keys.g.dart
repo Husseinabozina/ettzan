@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class LocaleKeys {
+abstract class  LocaleKeys {
   static const appName = 'appName';
   static const tagline = 'tagline';
   static const next = 'next';
@@ -350,4 +350,5 @@ abstract class LocaleKeys {
   static const noUpcomingSessions = 'noUpcomingSessions';
   static const noPastSessions = 'noPastSessions';
   static const bookingsAppearHere = 'bookingsAppearHere';
+
 }
