@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:etzan_life_coaching/core/design_system/app_assets.dart';
 import 'package:etzan_life_coaching/core/design_system/app_colors.dart';
 import 'package:etzan_life_coaching/core/design_system/app_tokens.dart';
@@ -26,10 +25,11 @@ class EtzanLogo extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SvgPicture.asset(
-            AppAssets.logo,
+          Image.asset(
+            AppAssets.etzanSymbol,
             width: resolvedSize,
             height: resolvedSize,
+            fit: BoxFit.contain,
           ),
           if (showWordmark && !compact) ...[
             const SizedBox(height: AppSpacing.xs),

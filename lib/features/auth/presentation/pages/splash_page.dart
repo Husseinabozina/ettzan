@@ -1,13 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:etzan_life_coaching/core/design_system/app_assets.dart';
 import 'package:etzan_life_coaching/core/design_system/app_colors.dart';
 import 'package:etzan_life_coaching/core/design_system/app_tokens.dart';
 import 'package:etzan_life_coaching/core/di/injection.dart';
 import 'package:etzan_life_coaching/core/localization/generated/locale_keys.g.dart';
 import 'package:etzan_life_coaching/core/navigation/app_routes.dart';
-import 'package:etzan_life_coaching/core/widgets/etzan_logo.dart';
 import 'package:etzan_life_coaching/features/auth/domain/repositories/auth_repository.dart';
 import 'package:etzan_life_coaching/features/auth/presentation/components/soft_orb.dart';
 
@@ -54,8 +52,12 @@ class _SplashScreenState extends State<SplashScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const EtzanLogo(size: 112),
-                      const SizedBox(height: AppSpacing.sm),
+                      Image.asset(
+                        AppAssets.etzanLogo,
+                        height: 190,
+                        fit: BoxFit.contain,
+                      ),
+                      const SizedBox(height: AppSpacing.md),
                       Text(
                         LocaleKeys.tagline.tr(context: context),
                         style: Theme.of(context)
@@ -63,13 +65,6 @@ class _SplashScreenState extends State<SplashScreen> {
                             .titleLarge
                             ?.copyWith(color: AppColors.primaryDark),
                         textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: AppSpacing.xl),
-                      SizedBox(
-                        height: 190,
-                        width: 420,
-                        child: SvgPicture.asset(AppAssets.calmLandscape,
-                            fit: BoxFit.contain),
                       ),
                       const SizedBox(height: AppSpacing.xl),
                       const SizedBox(

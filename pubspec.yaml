@@ -22,9 +22,25 @@ dependencies:
 
 dev_dependencies:
   build_runner: 2.4.15
+  flutter_launcher_icons: ^0.14.4
+  flutter_native_splash: ^2.4.6
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/branding/icon/etzan_app_icon_1024.png"
+  adaptive_icon_background: "#FDFDFE"
+  adaptive_icon_foreground: "assets/branding/icon/etzan_adaptive_foreground.png"
+
+flutter_native_splash:
+  color: "#F6F1FF"
+  image: "assets/branding/etzan_logo.png"
+  android_12:
+    color: "#F6F1FF"
+    image: "assets/branding/icon/etzan_adaptive_foreground.png"
 
 flutter:
   uses-material-design: true

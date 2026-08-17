@@ -1,4 +1,10 @@
 abstract final class AppAssets {
+  // Branding
+  static const etzanSymbol = 'assets/branding/etzan_symbol.png';
+  static const etzanLogo = 'assets/branding/etzan_logo.png';
+  static const etzanAppIcon = 'assets/branding/etzan_app_icon.png';
+
+  // Legacy assets kept for reference
   static const logo = 'assets/branding/etzan_logo.svg';
   static const onboardingGoals = 'assets/illustrations/onboarding_goals.svg';
   static const onboardingCoach = 'assets/illustrations/onboarding_coach.svg';
