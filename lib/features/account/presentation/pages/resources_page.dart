@@ -16,7 +16,11 @@ class ResourcesScreen extends StatefulWidget {
 
 class _ResourcesScreenState extends State<ResourcesScreen> {
   final _searchController = TextEditingController();
+  late Future<List<ResourceItem>> _resourcesFuture = _load();
   int _category = 0;
+
+  Future<List<ResourceItem>> _load() =>
+      getIt<EtzanBackendRepository>().getResources();
 
   @override
   void dispose() {
@@ -29,7 +33,7 @@ class _ResourcesScreenState extends State<ResourcesScreen> {
     return EtzanPage(
       title: LocaleKeys.resources.tr(context: context),
       child: FutureBuilder<List<ResourceItem>>(
-        future: getIt<EtzanBackendRepository>().getResources(),
+        future: _resourcesFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return ListView(
