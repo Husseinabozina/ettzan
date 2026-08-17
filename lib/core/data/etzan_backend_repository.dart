@@ -257,6 +257,20 @@ class EtzanBackendRepository {
     }).toList(growable: false);
   }
 
+  Future<List<GuestQuote>> getGuestQuotes() async {
+    final rows = await _supabase
+        .from('guest_quotes')
+        .select('id,text_ar,text_en,sort_order')
+        .eq('is_active', true)
+        .order('sort_order')
+        .limit(20);
+
+    return (rows as List<dynamic>)
+        .map((row) =>
+            GuestQuote.fromJson(Map<String, dynamic>.from(row as Map)))
+        .toList(growable: false);
+  }
+
   Future<CoachItem?> getCoach(String id) async {
     final coaches = await getCoaches();
     for (final coach in coaches) {
@@ -802,6 +816,24 @@ class ResourceItem {
   final bool isPremium;
   final String? contentUrl;
   final String? thumbnailUrl;
+}
+
+class GuestQuote {
+  const GuestQuote({
+    required this.id,
+    required this.textAr,
+    required this.textEn,
+  });
+
+  factory GuestQuote.fromJson(Map<String, dynamic> json) => GuestQuote(
+        id: json['id'].toString(),
+        textAr: json['text_ar'] as String? ?? '',
+        textEn: json['text_en'] as String? ?? '',
+      );
+
+  final String id;
+  final String textAr;
+  final String textEn;
 }
 
 class SubscriptionPlanItem {
