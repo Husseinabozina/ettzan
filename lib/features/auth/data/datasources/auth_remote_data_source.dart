@@ -32,6 +32,7 @@ class SupabaseAuthRemoteDataSource implements AuthRemoteDataSource {
       {required String fullName,
       required String email,
       required String password}) async {
+    await _signOutAnonymousSession();
     final normalizedEmail = email.trim();
     final response = await _client.auth.signUp(
       email: normalizedEmail,
@@ -56,6 +57,7 @@ class SupabaseAuthRemoteDataSource implements AuthRemoteDataSource {
 
   @override
   Future<User> signIn({required String email, required String password}) async {
+    await _signOutAnonymousSession();
     final response = await _client.auth
         .signInWithPassword(email: email.trim(), password: password);
     final user = response.user;
@@ -65,10 +67,25 @@ class SupabaseAuthRemoteDataSource implements AuthRemoteDataSource {
 
   @override
   Future<User> signInAnonymously() async {
+    final existing = _client.auth.currentUser;
+    if (existing != null && existing.isAnonymous) return existing;
     final response = await _client.auth.signInAnonymously();
     final user = response.user;
     if (user == null) throw const AuthException('guest_sign_in_failed');
     return user;
+  }
+
+  /// Switches away from an active anonymous session before a permanent
+  /// sign-up/sign-in. GoTrue refuses some auth actions while a session is
+  /// active; guests hold no data, so a clean sign-out is the safe transition.
+  Future<void> _signOutAnonymousSession() async {
+    final user = _client.auth.currentUser;
+    if (user == null || !user.isAnonymous) return;
+    try {
+      await _client.auth.signOut();
+    } catch (_) {
+      // Best effort; continue with the requested auth action either way.
+    }
   }
 
   @override

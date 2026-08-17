@@ -48,6 +48,10 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       return _map(await _remote.signInAnonymously().timeout(_authTimeout));
     } on AuthException catch (e) {
+      if (e.message.toLowerCase().contains('anonymous')) {
+        // e.g. "Anonymous sign-ins are disabled" -> localized guest error.
+        throw const AppFailure('guest_sign_in_failed', code: 'auth');
+      }
       throw AppFailure(e.message, code: 'auth');
     } on TimeoutException {
       throw const AppFailure('guest_sign_in_failed', code: 'auth_timeout');

@@ -26,6 +26,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscure = true;
+  bool _signingUp = false;
 
   @override
   void dispose() {
@@ -37,11 +38,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Future<void> _submit() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
-    await context.read<AuthCubit>().signUp(
-          fullName: _nameController.text,
-          email: _emailController.text,
-          password: _passwordController.text,
-        );
+    setState(() => _signingUp = true);
+    try {
+      await context.read<AuthCubit>().signUp(
+            fullName: _nameController.text,
+            email: _emailController.text,
+            password: _passwordController.text,
+          );
+    } finally {
+      if (mounted) setState(() => _signingUp = false);
+    }
   }
 
   Future<void> _continueAsGuest() => context.read<AuthCubit>().signInAsGuest();
@@ -123,7 +129,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: AppSpacing.lg),
               EtzanPrimaryButton(
-                label: state is AuthLoading
+                label: _signingUp
                     ? LocaleKeys.creatingAccount.tr(context: context)
                     : LocaleKeys.signup.tr(context: context),
                 onPressed: state is AuthLoading ? null : _submit,
