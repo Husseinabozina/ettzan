@@ -16,8 +16,7 @@ class UpcomingSessionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EtzanCard(
-      onTap: () =>
-          Navigator.of(context).pushNamed(AppRoutes.upcomingSessions),
+      onTap: () => Navigator.of(context).pushNamed(AppRoutes.upcomingSessions),
       child: Row(
         children: [
           EtzanAvatar(name: session.coachName, online: session.isOnline),

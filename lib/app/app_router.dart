@@ -11,9 +11,13 @@ import 'package:etzan_life_coaching/features/account/presentation/pages/settings
 import 'package:etzan_life_coaching/features/account/presentation/pages/subscription_page.dart';
 
 import 'package:etzan_life_coaching/features/auth/domain/repositories/auth_repository.dart';
-import 'package:etzan_life_coaching/features/auth/presentation/auth_screens.dart';
 import 'package:etzan_life_coaching/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:etzan_life_coaching/features/auth/presentation/pages/login_page.dart';
+import 'package:etzan_life_coaching/features/auth/presentation/pages/onboarding_coach_page.dart';
+import 'package:etzan_life_coaching/features/auth/presentation/pages/onboarding_goals_page.dart';
 import 'package:etzan_life_coaching/features/auth/presentation/pages/sign_in_required_page.dart';
+import 'package:etzan_life_coaching/features/auth/presentation/pages/sign_up_page.dart';
+import 'package:etzan_life_coaching/features/auth/presentation/pages/splash_page.dart';
 
 import 'package:etzan_life_coaching/features/coaching/presentation/pages/book_session_page.dart';
 import 'package:etzan_life_coaching/features/coaching/presentation/pages/coach_chat_page.dart';
@@ -68,21 +72,16 @@ abstract final class AppRouter {
 
     final page = switch (settings.name) {
       AppRoutes.splash => const SplashScreen(),
-
       AppRoutes.onboardingGoals => const OnboardingGoalsScreen(),
-
       AppRoutes.onboardingCoach => const OnboardingCoachScreen(),
-
       AppRoutes.signUp => BlocProvider(
           create: (_) => getIt<AuthCubit>(),
           child: const SignUpScreen(),
         ),
-
       AppRoutes.login => BlocProvider(
           create: (_) => getIt<AuthCubit>(),
           child: const LoginScreen(),
         ),
-
       AppRoutes.home => useGuestHome
           ? const GuestHomePage()
           : BlocProvider(
@@ -92,33 +91,22 @@ abstract final class AppRouter {
 
       // Coaching
       AppRoutes.discoverCoaches => const DiscoverCoachesScreen(),
-
       AppRoutes.coachProfile => const CoachProfileScreen(),
-
       AppRoutes.bookSession => const BookSessionScreen(),
-
       AppRoutes.upcomingSessions => const UpcomingSessionsScreen(),
-
       AppRoutes.sessionDetails => const SessionDetailsScreen(),
-
       AppRoutes.coachChat => const CoachChatScreen(),
 
       // Growth
       AppRoutes.goalsOverview => const GoalsOverviewScreen(),
-
       AppRoutes.createGoal => const CreateGoalScreen(),
-
       AppRoutes.habits => const HabitsScreen(),
-
       AppRoutes.dailyPlan => const DailyPlanScreen(),
-
       AppRoutes.calendar => const CalendarScreen(),
 
       // Journal
       AppRoutes.journalHome => const JournalHomeScreen(),
-
       AppRoutes.journalEntry => const JournalEntryScreen(),
-
       AppRoutes.progress => const ProgressAnalyticsScreen(),
 
       // Notifications
@@ -129,15 +117,10 @@ abstract final class AppRouter {
 
       // Account
       AppRoutes.resources => const ResourcesScreen(),
-
       AppRoutes.resourceViewer => const ResourceWebViewScreen(),
-
       AppRoutes.subscription => const SubscriptionScreen(),
-
       AppRoutes.profile => const ProfileScreen(),
-
       AppRoutes.settings => const SettingsScreen(),
-
       _ => useGuestHome
           ? const GuestHomePage()
           : BlocProvider(

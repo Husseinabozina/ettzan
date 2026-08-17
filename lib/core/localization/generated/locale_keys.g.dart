@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const appName = 'appName';
   static const tagline = 'tagline';
   static const next = 'next';
@@ -169,8 +169,10 @@ abstract class  LocaleKeys {
   static const weeklyActivity = 'weeklyActivity';
   static const editName = 'editName';
   static const appPreferences = 'appPreferences';
-  static const notificationPreferencesSaveError = 'notificationPreferencesSaveError';
-  static const notificationPreferencesLoadError = 'notificationPreferencesLoadError';
+  static const notificationPreferencesSaveError =
+      'notificationPreferencesSaveError';
+  static const notificationPreferencesLoadError =
+      'notificationPreferencesLoadError';
   static const reminders = 'reminders';
   static const privacyAndSecurity = 'privacyAndSecurity';
   static const changePassword = 'changePassword';
@@ -350,5 +352,4 @@ abstract class  LocaleKeys {
   static const noUpcomingSessions = 'noUpcomingSessions';
   static const noPastSessions = 'noPastSessions';
   static const bookingsAppearHere = 'bookingsAppearHere';
-
 }

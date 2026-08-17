@@ -100,8 +100,8 @@ class _DashboardContent extends StatelessWidget {
               iconAsset: AppAssets.iconPeople,
               color: AppColors.primary,
               label: LocaleKeys.discoverCoach.tr(context: context),
-              onTap: () => Navigator.of(context)
-                  .pushNamed(AppRoutes.discoverCoaches),
+              onTap: () =>
+                  Navigator.of(context).pushNamed(AppRoutes.discoverCoaches),
             ),
             EtzanIconTile(
               iconAsset: AppAssets.iconBook,
