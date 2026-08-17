@@ -42,10 +42,10 @@ class _SessionDetailsScreenState extends State<SessionDetailsScreen> {
     return bookings.isEmpty ? null : bookings.first;
   }
 
-  void _showMessage(String message) {
+  void _showMessage(String messageKey) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
+      SnackBar(content: Text(messageKey.tr(context: context))),
     );
   }
 
@@ -54,9 +54,7 @@ class _SessionDetailsScreenState extends State<SessionDetailsScreen> {
     if (url == null || url.trim().isEmpty) return;
 
     await Clipboard.setData(ClipboardData(text: url));
-    _showMessage(
-      LocaleKeys.meetingLinkCopied.tr(context: context),
-    );
+    _showMessage(LocaleKeys.meetingLinkCopied);
   }
 
   Future<void> _cancelBooking(BookingItem booking) async {
@@ -92,16 +90,12 @@ class _SessionDetailsScreenState extends State<SessionDetailsScreen> {
     try {
       await getIt<EtzanBackendRepository>().cancelBooking(booking.id);
       if (!mounted) return;
-      _showMessage(
-        LocaleKeys.bookingCancelled.tr(context: context),
-      );
+      _showMessage(LocaleKeys.bookingCancelled);
       Navigator.of(context).pop(true);
     } on AppFailure catch (failure) {
       _showMessage(failure.message);
     } catch (_) {
-      _showMessage(
-        LocaleKeys.bookingCancelError.tr(context: context),
-      );
+      _showMessage(LocaleKeys.bookingCancelError);
     } finally {
       if (mounted) setState(() => _working = false);
     }
@@ -115,9 +109,7 @@ class _SessionDetailsScreenState extends State<SessionDetailsScreen> {
       slots = await getIt<EtzanBackendRepository>()
           .getCoachAvailability(booking.coachId);
     } catch (_) {
-      _showMessage(
-        LocaleKeys.availabilityLoadError.tr(context: context),
-      );
+      _showMessage(LocaleKeys.availabilityLoadError);
       if (mounted) setState(() => _working = false);
       return;
     }
@@ -126,9 +118,7 @@ class _SessionDetailsScreenState extends State<SessionDetailsScreen> {
     if (!mounted) return;
 
     if (slots.isEmpty) {
-      _showMessage(
-        LocaleKeys.noAlternativeSlots.tr(context: context),
-      );
+      _showMessage(LocaleKeys.noAlternativeSlots);
       return;
     }
 
@@ -187,15 +177,11 @@ class _SessionDetailsScreenState extends State<SessionDetailsScreen> {
         _future = Future.value(resolvedBooking);
       });
 
-      _showMessage(
-        LocaleKeys.bookingRescheduled.tr(context: context),
-      );
+      _showMessage(LocaleKeys.bookingRescheduled);
     } on AppFailure catch (failure) {
       _showMessage(failure.message);
     } catch (_) {
-      _showMessage(
-        LocaleKeys.bookingRescheduleError.tr(context: context),
-      );
+      _showMessage(LocaleKeys.bookingRescheduleError);
     } finally {
       if (mounted) setState(() => _working = false);
     }
