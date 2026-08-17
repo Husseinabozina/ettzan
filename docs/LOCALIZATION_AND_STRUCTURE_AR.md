@@ -53,4 +53,4 @@ features/<feature>/
 - `core/widgets/`: widgets عامة بين أكثر من feature، مثل `AppErrorState`.
 - الـCubit وطبقة `data` لا تحتوي نصوص واجهة؛ تعيد code/failure، وتُحوّل الرسالة إلى ترجمة داخل الصفحة.
 
-الملفات القديمة ذات الاسم `*_screens.dart` هي موضع النقل التدريجي إلى `pages/` و`components/`، من دون تغيير routes أو سلوك التطبيق دفعة واحدة.
+اكتمل نقل جميع الـfeatures إلى هذا التقسيم، ولم يتبقَّ أي ملفات مجمّعة باسم `*_screens.dart`. أي feature جديدة تتبع نفس الشكل من البداية.
