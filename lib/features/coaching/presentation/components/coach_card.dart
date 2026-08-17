@@ -18,30 +18,32 @@ class CoachCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final verifiedLabel = (coach.isVerified
+            ? LocaleKeys.certifiedLifeCoach
+            : LocaleKeys.lifeCoach)
+        .tr(context: context);
+
     return EtzanCard(
+      padding: const EdgeInsets.all(AppSpacing.lg),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              EtzanAvatar(name: coach.name, size: 58, online: true),
+              EtzanAvatar(name: coach.name, size: 64, online: true),
               const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      LocaleKeys.coachNameLabel.tr(
-                        context: context,
-                        namedArgs: {'name': coach.name},
-                      ),
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    Text(
-                      coach.specialties.isEmpty
-                          ? LocaleKeys.lifeCoach.tr(context: context)
-                          : coach.specialties.join(' • '),
-                      maxLines: 2,
+                      coach.name,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: AppColors.primaryDeep,
+                            fontWeight: FontWeight.w800,
+                          ),
                     ),
                     const SizedBox(height: AppSpacing.xs),
                     Row(
@@ -49,11 +51,23 @@ class CoachCard extends StatelessWidget {
                         const Icon(
                           Icons.star_rounded,
                           color: AppColors.warning,
-                          size: 20,
+                          size: 18,
                         ),
+                        const SizedBox(width: AppSpacing.xs),
                         Text(
-                          '${coach.rating.toStringAsFixed(1)} '
+                          coach.rating.toStringAsFixed(1),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.w700),
+                        ),
+                        const SizedBox(width: AppSpacing.xs),
+                        Text(
                           '(${coach.reviewCount})',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(color: AppColors.inkMuted),
                         ),
                       ],
                     ),
@@ -63,9 +77,24 @@ class CoachCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.md),
-          OutlinedButton(
-            onPressed: onViewProfile,
-            child: Text(LocaleKeys.viewProfile.tr(context: context)),
+          Wrap(
+            spacing: AppSpacing.xs,
+            runSpacing: AppSpacing.xs,
+            children: [
+              EtzanTag(label: verifiedLabel),
+              ...coach.specialties.take(2).map(
+                    (specialty) => EtzanTag(label: specialty),
+                  ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          SizedBox(
+            width: double.infinity,
+            child: EtzanPrimaryButton(
+              label: LocaleKeys.viewProfile.tr(context: context),
+              icon: Icons.person_outline_rounded,
+              onPressed: onViewProfile,
+            ),
           ),
         ],
       ),
