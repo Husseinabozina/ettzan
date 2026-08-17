@@ -1,0 +1,26 @@
+<svg width="240" height="240" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g1" x1="57" y1="56" x2="178" y2="176" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#62D9CC"/>
+      <stop offset="1" stop-color="#0FA398"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="38" y1="79" x2="126" y2="191" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#CDB4F7"/>
+      <stop offset="1" stop-color="#7D70D8"/>
+    </linearGradient>
+    <linearGradient id="g3" x1="117" y1="75" x2="205" y2="189" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#B7EEE6"/>
+      <stop offset="1" stop-color="#65CFC2"/>
+    </linearGradient>
+    <filter id="shadow" x="18" y="21" width="204" height="204" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#0F172A" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+  <g filter="url(#shadow)">
+    <path d="M120 43C146 62 160 87 155 116C149 142 136 162 120 177C104 161 91 142 85 116C80 87 94 62 120 43Z" fill="url(#g1)"/>
+    <path d="M47 78C82 78 108 94 120 121C112 153 93 176 66 190C45 161 39 123 47 78Z" fill="url(#g2)"/>
+    <path d="M193 78C158 78 132 94 120 121C128 153 147 176 174 190C195 161 201 123 193 78Z" fill="url(#g3)"/>
+    <path d="M76 174C93 184 108 189 120 190C132 189 147 184 164 174C151 198 136 210 120 210C104 210 89 198 76 174Z" fill="#0A847C"/>
+    <circle cx="120" cy="27" r="9" fill="#E7C68E"/>
+  </g>
+</svg>

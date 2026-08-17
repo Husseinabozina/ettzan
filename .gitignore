@@ -1,0 +1,6 @@
+# Flutter build artifacts
+build/
+.dart_tool/
+*.iml
+.idea/
+.DS_Store

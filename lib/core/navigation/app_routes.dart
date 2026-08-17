@@ -1,0 +1,28 @@
+abstract final class AppRoutes {
+  static const splash = '/';
+  static const onboardingGoals = '/onboarding/goals';
+  static const onboardingCoach = '/onboarding/coach';
+  static const signUp = '/auth/sign-up';
+  static const login = '/auth/login';
+  static const home = '/home';
+  static const discoverCoaches = '/coaches';
+  static const coachProfile = '/coaches/profile';
+  static const bookSession = '/coaches/book';
+  static const upcomingSessions = '/sessions';
+  static const goalsOverview = '/growth/goals';
+  static const createGoal = '/growth/goals/create';
+  static const habits = '/growth/habits';
+  static const dailyPlan = '/growth/daily-plan';
+  static const calendar = '/growth/calendar';
+  static const journalHome = '/journal';
+  static const journalEntry = '/journal/new';
+  static const progress = '/journal/progress';
+  static const sessionDetails = '/journal/session-details';
+  static const coachChat = '/journal/chat';
+  static const notifications = '/account/notifications';
+  static const resources = '/account/resources';
+  static const resourceViewer = '/account/resources/viewer';
+  static const subscription = '/account/subscription';
+  static const profile = '/account/profile';
+  static const settings = '/account/settings';
+}
