@@ -4,6 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:etzan_life_coaching/core/di/injection.dart';
 import 'package:etzan_life_coaching/core/navigation/app_routes.dart';
 
+import 'package:etzan_life_coaching/features/account/presentation/pages/about_page.dart';
+import 'package:etzan_life_coaching/features/account/presentation/pages/change_password_page.dart';
+import 'package:etzan_life_coaching/features/account/presentation/pages/contact_page.dart';
+import 'package:etzan_life_coaching/features/account/presentation/pages/help_page.dart';
+import 'package:etzan_life_coaching/features/account/presentation/pages/privacy_page.dart';
 import 'package:etzan_life_coaching/features/account/presentation/pages/profile_page.dart';
 import 'package:etzan_life_coaching/features/account/presentation/pages/resource_web_view_page.dart';
 import 'package:etzan_life_coaching/features/account/presentation/pages/resources_page.dart';
@@ -60,6 +65,7 @@ abstract final class AppRouter {
     AppRoutes.notifications,
     AppRoutes.subscription,
     AppRoutes.profile,
+    AppRoutes.changePassword,
   };
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -121,6 +127,11 @@ abstract final class AppRouter {
       AppRoutes.subscription => const SubscriptionScreen(),
       AppRoutes.profile => const ProfileScreen(),
       AppRoutes.settings => const SettingsScreen(),
+      AppRoutes.privacy => const PrivacyScreen(),
+      AppRoutes.changePassword => const ChangePasswordScreen(),
+      AppRoutes.help => const HelpScreen(),
+      AppRoutes.contact => const ContactScreen(),
+      AppRoutes.about => const AboutScreen(),
       _ => useGuestHome
           ? const GuestHomePage()
           : BlocProvider(

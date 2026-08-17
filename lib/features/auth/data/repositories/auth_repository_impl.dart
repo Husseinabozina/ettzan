@@ -95,5 +95,16 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<void> changePassword(String newPassword) async {
+    try {
+      await _remote.changePassword(newPassword).timeout(_authTimeout);
+    } on AuthException catch (e) {
+      throw AppFailure(e.message, code: 'auth');
+    } on TimeoutException {
+      throw const AppFailure('auth_timeout', code: 'auth_timeout');
+    }
+  }
+
+  @override
   Future<void> signOut() => _remote.signOut();
 }

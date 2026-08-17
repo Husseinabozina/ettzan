@@ -119,8 +119,8 @@ def main() -> None:
     public_screens: set[str] = set()
     for path in (LIB / 'features').rglob('*.dart'):
         public_screens.update(re.findall(r'^class ([A-Z][A-Za-z0-9]*Screen)\b', path.read_text(encoding='utf-8'), re.MULTILINE))
-    if len(public_screens) != 26:
-        fail(f'Expected 26 public screens, found {len(public_screens)}: {sorted(public_screens)}')
+    if len(public_screens) != 31:
+        fail(f'Expected 31 public screens, found {len(public_screens)}: {sorted(public_screens)}')
 
     routes_file = (LIB / 'core/navigation/app_routes.dart').read_text(encoding='utf-8')
     route_names = set(re.findall(r'static const (\w+) =\s*', routes_file))

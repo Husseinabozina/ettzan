@@ -4,6 +4,7 @@
 
 abstract class LocaleKeys {
   static const aboutCoach = 'aboutCoach';
+  static const aboutDescription = 'aboutDescription';
   static const aboutEtzan = 'aboutEtzan';
   static const achievements = 'achievements';
   static const activeGoals = 'activeGoals';
@@ -78,9 +79,16 @@ abstract class LocaleKeys {
   static const completeGoogleSignIn = 'completeGoogleSignIn';
   static const completed = 'completed';
   static const confirmBooking = 'confirmBooking';
+  static const confirmPassword = 'confirmPassword';
   static const consecutiveDays = 'consecutiveDays';
   static const consistency = 'consistency';
+  static const contactEmailAddress = 'contactEmailAddress';
+  static const contactEmailCopied = 'contactEmailCopied';
+  static const contactEmailLabel = 'contactEmailLabel';
+  static const contactIntro = 'contactIntro';
   static const contactUs = 'contactUs';
+  static const contactWebsiteAddress = 'contactWebsiteAddress';
+  static const contactWebsiteLabel = 'contactWebsiteLabel';
   static const continueAction = 'continueAction';
   static const continueAsGuest = 'continueAsGuest';
   static const continuingAsGuest = 'continuingAsGuest';
@@ -156,7 +164,14 @@ abstract class LocaleKeys {
   static const habitsLoadError = 'habitsLoadError';
   static const helloSara = 'helloSara';
   static const helloUser = 'helloUser';
+  static const helpAnswerOne = 'helpAnswerOne';
+  static const helpAnswerThree = 'helpAnswerThree';
+  static const helpAnswerTwo = 'helpAnswerTwo';
   static const helpCenter = 'helpCenter';
+  static const helpIntro = 'helpIntro';
+  static const helpQuestionOne = 'helpQuestionOne';
+  static const helpQuestionThree = 'helpQuestionThree';
+  static const helpQuestionTwo = 'helpQuestionTwo';
   static const home = 'home';
   static const important = 'important';
   static const increaseProgress = 'increaseProgress';
@@ -197,6 +212,7 @@ abstract class LocaleKeys {
   static const motivationalMessages = 'motivationalMessages';
   static const newBeginning = 'newBeginning';
   static const newEntry = 'newEntry';
+  static const newPassword = 'newPassword';
   static const next = 'next';
   static const noActiveCoaches = 'noActiveCoaches';
   static const noActiveCoachesDescription = 'noActiveCoachesDescription';
@@ -237,6 +253,9 @@ abstract class LocaleKeys {
   static const onTrack = 'onTrack';
   static const overallMood = 'overallMood';
   static const password = 'password';
+  static const passwordChangeError = 'passwordChangeError';
+  static const passwordChangeSuccess = 'passwordChangeSuccess';
+  static const passwordMismatch = 'passwordMismatch';
   static const passwordResetLinkSent = 'passwordResetLinkSent';
   static const passwordTooShort = 'passwordTooShort';
   static const pastTab = 'pastTab';
@@ -252,6 +271,13 @@ abstract class LocaleKeys {
   static const priorities = 'priorities';
   static const privacy = 'privacy';
   static const privacyAndSecurity = 'privacyAndSecurity';
+  static const privacyDataBody = 'privacyDataBody';
+  static const privacyDataTitle = 'privacyDataTitle';
+  static const privacyIntro = 'privacyIntro';
+  static const privacySecurityBody = 'privacySecurityBody';
+  static const privacySecurityTitle = 'privacySecurityTitle';
+  static const privacyUseBody = 'privacyUseBody';
+  static const privacyUseTitle = 'privacyUseTitle';
   static const profile = 'profile';
   static const profileLoadError = 'profileLoadError';
   static const profileNameRequired = 'profileNameRequired';

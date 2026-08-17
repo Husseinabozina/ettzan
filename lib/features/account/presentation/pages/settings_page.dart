@@ -192,14 +192,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   leading: const Icon(Icons.lock_outline),
                   title: Text(LocaleKeys.privacy.tr(context: context)),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () {},
+                  onTap: () =>
+                      Navigator.of(context).pushNamed(AppRoutes.privacy),
                 ),
                 const Divider(),
                 ListTile(
                   leading: const Icon(Icons.key_outlined),
                   title: Text(LocaleKeys.changePassword.tr(context: context)),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () {},
+                  onTap: () => Navigator.of(context)
+                      .pushNamed(AppRoutes.changePassword),
                 ),
               ],
             ),
@@ -214,21 +216,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   leading: const Icon(Icons.help_outline),
                   title: Text(LocaleKeys.helpCenter.tr(context: context)),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () {},
+                  onTap: () => Navigator.of(context).pushNamed(AppRoutes.help),
                 ),
                 const Divider(),
                 ListTile(
                   leading: const Icon(Icons.chat_bubble_outline),
                   title: Text(LocaleKeys.contactUs.tr(context: context)),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () {},
+                  onTap: () =>
+                      Navigator.of(context).pushNamed(AppRoutes.contact),
                 ),
                 const Divider(),
                 ListTile(
                   leading: const Icon(Icons.info_outline),
                   title: Text(LocaleKeys.aboutEtzan.tr(context: context)),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () {},
+                  onTap: () =>
+                      Navigator.of(context).pushNamed(AppRoutes.about),
                 ),
               ],
             ),

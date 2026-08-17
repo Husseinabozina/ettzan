@@ -25,4 +25,9 @@ abstract final class AppRoutes {
   static const subscription = '/account/subscription';
   static const profile = '/account/profile';
   static const settings = '/account/settings';
+  static const privacy = '/account/settings/privacy';
+  static const changePassword = '/account/settings/change-password';
+  static const help = '/account/settings/help';
+  static const contact = '/account/settings/contact';
+  static const about = '/account/settings/about';
 }

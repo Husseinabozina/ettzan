@@ -13,6 +13,7 @@ abstract interface class AuthRemoteDataSource {
   Future<User> signInAnonymously();
   Future<void> signInWithGoogle();
   Future<void> sendPasswordReset(String email);
+  Future<void> changePassword(String newPassword);
   Future<void> signOut();
 }
 
@@ -105,6 +106,10 @@ class SupabaseAuthRemoteDataSource implements AuthRemoteDataSource {
   @override
   Future<void> sendPasswordReset(String email) =>
       _client.auth.resetPasswordForEmail(email.trim());
+
+  @override
+  Future<void> changePassword(String newPassword) =>
+      _client.auth.updateUser(UserAttributes(password: newPassword));
 
   @override
   Future<void> signOut() => _client.auth.signOut();

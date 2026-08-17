@@ -11,5 +11,6 @@ abstract interface class AuthRepository {
   Future<AuthUser> signInAsGuest();
   Future<void> signInWithGoogle();
   Future<void> sendPasswordReset(String email);
+  Future<void> changePassword(String newPassword);
   Future<void> signOut();
 }
