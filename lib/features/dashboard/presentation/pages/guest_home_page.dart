@@ -30,6 +30,8 @@ class GuestHomePage extends StatelessWidget {
         ),
         padding: const EdgeInsets.only(bottom: AppSpacing.lg),
         children: [
+          const GuestQuoteCarousel(),
+          const SizedBox(height: AppSpacing.lg),
           EtzanCard(
             gradient: AppColors.calmGradient,
             padding: const EdgeInsets.all(AppSpacing.lg),
@@ -79,8 +81,6 @@ class GuestHomePage extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: AppSpacing.lg),
-          const GuestQuoteCarousel(),
           const SizedBox(height: AppSpacing.lg),
           AdaptiveGrid(
             phone: 1,
