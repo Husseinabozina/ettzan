@@ -16,7 +16,7 @@ class ResourcesScreen extends StatefulWidget {
 
 class _ResourcesScreenState extends State<ResourcesScreen> {
   final _searchController = TextEditingController();
-  late Future<List<ResourceItem>> _resourcesFuture = _load();
+  late final Future<List<ResourceItem>> _resourcesFuture = _load();
   int _category = 0;
 
   Future<List<ResourceItem>> _load() =>
