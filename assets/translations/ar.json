@@ -165,8 +165,6 @@
   "weeklyActivity": "{count} أيام نشاط",
   "editName": "تعديل الاسم",
   "appPreferences": "تفضيلات التطبيق",
-  "notificationPreferencesSaveError": "تعذّر حفظ تفضيلات التنبيهات.",
-  "notificationPreferencesLoadError": "تعذّر تحميل تفضيلات التنبيهات.",
   "reminders": "التذكيرات",
   "privacyAndSecurity": "الخصوصية والأمان",
   "changePassword": "تغيير كلمة المرور",
@@ -345,5 +343,15 @@
   "sessionsLoadError": "تعذّر تحميل الجلسات.",
   "noUpcomingSessions": "لا توجد جلسات قادمة",
   "noPastSessions": "لا توجد جلسات سابقة",
-  "bookingsAppearHere": "ستظهر حجوزاتك هنا."
+  "bookingsAppearHere": "ستظهر حجوزاتك هنا.",
+  "profileNameRequired": "اكتب الاسم أولًا.",
+  "slotAlreadyBooked": "الموعد محجوز بالفعل، اختر موعدًا آخر.",
+  "slotNoLongerAvailable": "هذا الموعد لم يعد متاحًا، اختر موعدًا آخر.",
+  "cancelCompletedSessionError": "الجلسة مكتملة ولا يمكن إلغاؤها.",
+  "bookingModifyError": "لا يمكن تعديل هذا الحجز.",
+  "bookingRescheduleNotAllowed": "لا يمكن إعادة جدولة هذا الحجز.",
+  "noCoachAvailableForChat": "لا يوجد مدرب متاح للمحادثة الآن.",
+  "messageRequired": "اكتب الرسالة أولًا.",
+  "notificationPreferencesSaveError": "تعذّر حفظ تفضيلات التنبيهات.",
+  "notificationPreferencesLoadError": "تعذّر تحميل تفضيلات التنبيهات."
 }

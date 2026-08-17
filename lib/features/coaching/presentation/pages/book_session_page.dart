@@ -57,7 +57,7 @@ class _BookSessionScreenState extends State<BookSessionScreen> {
     } on AppFailure catch (failure) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(failure.message)),
+        SnackBar(content: Text(failure.message.tr(context: context))),
       );
     } catch (_) {
       if (!mounted) return;

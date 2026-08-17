@@ -1,4 +1,5 @@
 import 'package:etzan_life_coaching/core/error/app_failure.dart';
+import 'package:etzan_life_coaching/core/localization/generated/locale_keys.g.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class EtzanBackendRepository {
@@ -10,7 +11,7 @@ class EtzanBackendRepository {
     final id = _supabase.auth.currentUser?.id;
     if (id == null) {
       throw const AppFailure(
-        'انتهت جلسة تسجيل الدخول. سجّل الدخول مرة أخرى.',
+        LocaleKeys.loginSessionExpired,
         code: 'auth_required',
       );
     }
@@ -21,7 +22,7 @@ class EtzanBackendRepository {
     final user = _supabase.auth.currentUser;
     if (user == null) {
       throw const AppFailure(
-        'انتهت جلسة تسجيل الدخول. سجّل الدخول مرة أخرى.',
+        LocaleKeys.loginSessionExpired,
         code: 'auth_required',
       );
     }
@@ -78,7 +79,8 @@ class EtzanBackendRepository {
   Future<void> updateProfileName(String fullName) async {
     final name = fullName.trim();
     if (name.isEmpty) {
-      throw const AppFailure('اكتب الاسم أولًا.', code: 'invalid_profile');
+      throw const AppFailure(LocaleKeys.profileNameRequired,
+          code: 'invalid_profile');
     }
     await _supabase.from('profiles').update({
       'full_name': name,
@@ -297,14 +299,14 @@ class EtzanBackendRepository {
       final message = e.message.toUpperCase();
       if (message.contains('SLOT_ALREADY_BOOKED')) {
         throw const AppFailure(
-          'المعاد ده اتحجز بالفعل. اختار معاد تاني.',
+          LocaleKeys.slotAlreadyBooked,
           code: 'slot_already_booked',
         );
       }
       if (message.contains('SLOT_IN_PAST') ||
           message.contains('SLOT_NOT_FOUND')) {
         throw const AppFailure(
-          'المعاد ده لم يعد متاحًا. اختار معاد تاني.',
+          LocaleKeys.slotNoLongerAvailable,
           code: 'slot_unavailable',
         );
       }
@@ -377,14 +379,14 @@ class EtzanBackendRepository {
       final message = e.message.toUpperCase();
       if (message.contains('BOOKING_ALREADY_COMPLETED')) {
         throw const AppFailure(
-          'الجلسة مكتملة ولا يمكن إلغاؤها.',
+          LocaleKeys.cancelCompletedSessionError,
           code: 'booking_completed',
         );
       }
       if (message.contains('BOOKING_NOT_FOUND') ||
           message.contains('FORBIDDEN')) {
         throw const AppFailure(
-          'لا يمكن تعديل هذا الحجز.',
+          LocaleKeys.bookingModifyError,
           code: 'booking_unavailable',
         );
       }
@@ -408,13 +410,13 @@ class EtzanBackendRepository {
       final message = e.message.toUpperCase();
       if (message.contains('SLOT_ALREADY_BOOKED')) {
         throw const AppFailure(
-          'المعاد ده اتحجز بالفعل. اختار معاد تاني.',
+          LocaleKeys.slotAlreadyBooked,
           code: 'slot_already_booked',
         );
       }
       if (message.contains('BOOKING_NOT_RESCHEDULABLE')) {
         throw const AppFailure(
-          'لا يمكن إعادة جدولة هذا الحجز.',
+          LocaleKeys.bookingRescheduleNotAllowed,
           code: 'booking_not_reschedulable',
         );
       }
@@ -422,7 +424,7 @@ class EtzanBackendRepository {
           message.contains('SLOT_NOT_FOUND') ||
           message.contains('COACH_MISMATCH')) {
         throw const AppFailure(
-          'المعاد ده لم يعد متاحًا. اختار معاد تاني.',
+          LocaleKeys.slotNoLongerAvailable,
           code: 'slot_unavailable',
         );
       }
@@ -505,7 +507,8 @@ class EtzanBackendRepository {
   }) async {
     final trimmedTitle = title.trim();
     if (trimmedTitle.isEmpty) {
-      throw const AppFailure('اكتب اسم العادة أولًا.', code: 'invalid_habit');
+      throw const AppFailure(LocaleKeys.habitNameRequired,
+          code: 'invalid_habit');
     }
 
     await _supabase.from('habits').insert({
@@ -602,7 +605,7 @@ class EtzanBackendRepository {
     final coach = await _resolveChatCoach();
     if (coach == null) {
       throw const AppFailure(
-        'لا يوجد مدرب متاح للمحادثة الآن.',
+        LocaleKeys.noCoachAvailableForChat,
         code: 'no_coach',
       );
     }
@@ -668,7 +671,7 @@ class EtzanBackendRepository {
   }) async {
     final text = body.trim();
     if (text.isEmpty) {
-      throw const AppFailure('اكتب الرسالة أولًا.', code: 'empty_message');
+      throw const AppFailure(LocaleKeys.messageRequired, code: 'empty_message');
     }
     final userId = _userId;
     final row = await _supabase

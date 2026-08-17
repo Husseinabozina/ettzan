@@ -169,10 +169,6 @@ abstract class LocaleKeys {
   static const weeklyActivity = 'weeklyActivity';
   static const editName = 'editName';
   static const appPreferences = 'appPreferences';
-  static const notificationPreferencesSaveError =
-      'notificationPreferencesSaveError';
-  static const notificationPreferencesLoadError =
-      'notificationPreferencesLoadError';
   static const reminders = 'reminders';
   static const privacyAndSecurity = 'privacyAndSecurity';
   static const changePassword = 'changePassword';
@@ -352,4 +348,16 @@ abstract class LocaleKeys {
   static const noUpcomingSessions = 'noUpcomingSessions';
   static const noPastSessions = 'noPastSessions';
   static const bookingsAppearHere = 'bookingsAppearHere';
+  static const profileNameRequired = 'profileNameRequired';
+  static const slotAlreadyBooked = 'slotAlreadyBooked';
+  static const slotNoLongerAvailable = 'slotNoLongerAvailable';
+  static const cancelCompletedSessionError = 'cancelCompletedSessionError';
+  static const bookingModifyError = 'bookingModifyError';
+  static const bookingRescheduleNotAllowed = 'bookingRescheduleNotAllowed';
+  static const noCoachAvailableForChat = 'noCoachAvailableForChat';
+  static const messageRequired = 'messageRequired';
+  static const notificationPreferencesSaveError =
+      'notificationPreferencesSaveError';
+  static const notificationPreferencesLoadError =
+      'notificationPreferencesLoadError';
 }

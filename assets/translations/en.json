@@ -165,8 +165,6 @@
   "weeklyActivity": "{count} active days",
   "editName": "Edit name",
   "appPreferences": "App preferences",
-  "notificationPreferencesSaveError": "Couldn't save notification preferences.",
-  "notificationPreferencesLoadError": "Couldn't load notification preferences.",
   "reminders": "Reminders",
   "privacyAndSecurity": "Privacy & security",
   "changePassword": "Change password",
@@ -345,5 +343,15 @@
   "sessionsLoadError": "Couldn't load sessions.",
   "noUpcomingSessions": "No upcoming sessions",
   "noPastSessions": "No past sessions",
-  "bookingsAppearHere": "Your bookings will appear here."
+  "bookingsAppearHere": "Your bookings will appear here.",
+  "profileNameRequired": "Enter your name first.",
+  "slotAlreadyBooked": "This slot is already booked. Pick another one.",
+  "slotNoLongerAvailable": "This slot is no longer available. Pick another one.",
+  "cancelCompletedSessionError": "The session is completed and can't be cancelled.",
+  "bookingModifyError": "This booking can't be modified.",
+  "bookingRescheduleNotAllowed": "This booking can't be rescheduled.",
+  "noCoachAvailableForChat": "No coach is available for chat right now.",
+  "messageRequired": "Write your message first.",
+  "notificationPreferencesSaveError": "Couldn't save notification preferences.",
+  "notificationPreferencesLoadError": "Couldn't load notification preferences."
 }

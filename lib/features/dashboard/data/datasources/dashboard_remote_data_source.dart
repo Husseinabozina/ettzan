@@ -1,4 +1,5 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:etzan_life_coaching/core/localization/generated/locale_keys.g.dart';
 import 'package:etzan_life_coaching/core/error/app_failure.dart';
 import 'package:etzan_life_coaching/features/dashboard/data/dto/dashboard_dto.dart';
 
@@ -15,7 +16,7 @@ class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
   Future<DashboardDto> getDashboard() async {
     final user = _supabase.auth.currentUser;
     if (user == null) {
-      throw const AppFailure('انتهت جلسة تسجيل الدخول. سجّل الدخول مرة أخرى.',
+      throw const AppFailure(LocaleKeys.loginSessionExpired,
           code: 'auth_required');
     }
 

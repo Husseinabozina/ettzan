@@ -106,6 +106,16 @@ def main() -> None:
     if not generated_keys.exists():
         fail('Missing generated locale keys. Run ./tool/generate_localization.sh')
 
+    generated_source = generated_keys.read_text(encoding='utf-8')
+    generated = set(re.findall(r"static const (\w+) = '", generated_source))
+    if generated != ar_keys:
+        fail(
+            'Generated keys differ from JSON. '
+            f'Missing in generated: {sorted(ar_keys - generated)}; '
+            f'extra in generated: {sorted(generated - ar_keys)}. '
+            'Run ./tool/generate_localization.sh'
+        )
+
     public_screens: set[str] = set()
     for path in (LIB / 'features').rglob('*.dart'):
         public_screens.update(re.findall(r'^class ([A-Z][A-Za-z0-9]*Screen)\b', path.read_text(encoding='utf-8'), re.MULTILINE))
@@ -120,6 +130,10 @@ def main() -> None:
         fail(f'Route mismatch. Missing mappings: {sorted(route_names - mapped_routes)}; unknown mappings: {sorted(mapped_routes - route_names)}')
 
     all_source = '\n'.join(path.read_text(encoding='utf-8') for path in dart_files)
+    used = set(re.findall(r'LocaleKeys\.(\w+)', all_source)) - {'LocaleKeys'}
+    undefined = sorted(used - ar_keys)
+    if undefined:
+        fail(f'LocaleKeys used in code but missing from JSON: {undefined}')
     if 'TextDirection.rtl' in all_source or 'TextDirection.ltr' in all_source:
         fail('Hardcoded TextDirection found; locale must control direction automatically')
 
