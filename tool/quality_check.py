@@ -107,7 +107,7 @@ def main() -> None:
         fail('Missing generated locale keys. Run ./tool/generate_localization.sh')
 
     generated_source = generated_keys.read_text(encoding='utf-8')
-    generated = set(re.findall(r"static const (\w+) = '", generated_source))
+    generated = set(re.findall(r"static const (\w+) =\s*'", generated_source))
     if generated != ar_keys:
         fail(
             'Generated keys differ from JSON. '
@@ -123,7 +123,7 @@ def main() -> None:
         fail(f'Expected 26 public screens, found {len(public_screens)}: {sorted(public_screens)}')
 
     routes_file = (LIB / 'core/navigation/app_routes.dart').read_text(encoding='utf-8')
-    route_names = set(re.findall(r'static const (\w+) =', routes_file))
+    route_names = set(re.findall(r'static const (\w+) =\s*', routes_file))
     router_file = (LIB / 'app/app_router.dart').read_text(encoding='utf-8')
     mapped_routes = set(re.findall(r'AppRoutes\.(\w+) =>', router_file))
     if route_names != mapped_routes:
