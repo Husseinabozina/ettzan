@@ -8,6 +8,8 @@ import 'package:etzan_life_coaching/core/navigation/app_routes.dart';
 import 'package:etzan_life_coaching/core/widgets/etzan_components.dart';
 import 'package:etzan_life_coaching/core/widgets/etzan_shell.dart';
 
+import 'package:etzan_life_coaching/features/dashboard/presentation/components/guest_quote_carousel.dart';
+
 class GuestHomePage extends StatelessWidget {
   const GuestHomePage({super.key});
 
@@ -77,6 +79,8 @@ class GuestHomePage extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(height: AppSpacing.lg),
+          const GuestQuoteCarousel(),
           const SizedBox(height: AppSpacing.lg),
           AdaptiveGrid(
             phone: 1,
