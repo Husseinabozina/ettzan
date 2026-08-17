@@ -18,7 +18,11 @@ class AuthCubit extends Cubit<AuthState> {
       : super(const AuthInitial()) {
     _authSubscription = _repository.authStateChanges.listen(
       (user) {
-        if (user != null && !isClosed) emit(AuthAuthenticated(user));
+        // Anonymous/guest sessions must not drive auth pages; the guest flow
+        // navigates explicitly through signInAsGuest().
+        if (user != null && !user.isGuest && !isClosed) {
+          emit(AuthAuthenticated(user));
+        }
       },
       onError: (_, __) {
         if (!isClosed) {
