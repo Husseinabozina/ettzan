@@ -18,37 +18,68 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  late Future<UserPreferences>? _preferencesFuture =
-      _canUseAccountPreferences ? _loadPreferences() : null;
-  bool _savingPreferences = false;
+  UserPreferences? _preferences;
+  bool _loadingPreferences = true;
+  bool _preferencesError = false;
 
   bool get _canUseAccountPreferences {
     final user = getIt<AuthRepository>().currentUser;
     return user != null && !user.isGuest;
   }
 
-  Future<UserPreferences> _loadPreferences() =>
-      getIt<EtzanBackendRepository>().getUserPreferences();
-
-  void _reloadPreferences() {
-    if (!_canUseAccountPreferences) return;
-    setState(() {
-      _preferencesFuture = _loadPreferences();
-    });
+  @override
+  void initState() {
+    super.initState();
+    if (_canUseAccountPreferences) {
+      _loadPreferences();
+    } else {
+      _loadingPreferences = false;
+    }
   }
 
-  Future<void> _updatePreferences(UserPreferences preferences) async {
-    setState(() => _savingPreferences = true);
+  Future<void> _loadPreferences() async {
+    setState(() {
+      _loadingPreferences = true;
+      _preferencesError = false;
+    });
     try {
-      final updated =
-          await getIt<EtzanBackendRepository>().updateUserPreferences(
-        preferences,
-      );
+      final preferences =
+          await getIt<EtzanBackendRepository>().getUserPreferences();
+      if (!mounted) return;
       setState(() {
-        _preferencesFuture = Future.value(updated);
+        _preferences = preferences;
+        _loadingPreferences = false;
       });
     } catch (_) {
       if (!mounted) return;
+      setState(() {
+        _preferencesError = true;
+        _loadingPreferences = false;
+      });
+    }
+  }
+
+  /// Optimistic toggle: flips the switch instantly for immediate feedback,
+  /// then saves in the background and reverts if the save fails.
+  void _togglePreference(UserPreferences next) {
+    final previous = _preferences;
+    if (previous == null) return;
+    setState(() => _preferences = next);
+    _savePreference(next, previous);
+  }
+
+  Future<void> _savePreference(
+    UserPreferences next,
+    UserPreferences previous,
+  ) async {
+    try {
+      final updated =
+          await getIt<EtzanBackendRepository>().updateUserPreferences(next);
+      if (!mounted) return;
+      setState(() => _preferences = updated);
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _preferences = previous);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -56,9 +87,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         ),
       );
-      _reloadPreferences();
-    } finally {
-      if (mounted) setState(() => _savingPreferences = false);
     }
   }
 
@@ -115,70 +143,49 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
             )
+          else if (_loadingPreferences)
+            const EtzanLoadingCard(height: 190),
+          else if (_preferencesError)
+            EtzanEmptyState(
+              title: LocaleKeys.notificationPreferencesLoadError.tr(
+                context: context,
+              ),
+              body: LocaleKeys.checkSupabaseConnection.tr(context: context),
+              action: EtzanPrimaryButton(
+                label: LocaleKeys.retry.tr(context: context),
+                onPressed: _loadPreferences,
+              ),
+            )
           else
-            FutureBuilder<UserPreferences>(
-              future: _preferencesFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState != ConnectionState.done) {
-                  return const EtzanLoadingCard(height: 190);
-                }
-
-                if (snapshot.hasError) {
-                  return EtzanEmptyState(
-                    title: LocaleKeys.notificationPreferencesLoadError.tr(
-                      context: context,
+            EtzanCard(
+              child: Column(
+                children: [
+                  SwitchListTile(
+                    title: Text(LocaleKeys.reminders.tr(context: context)),
+                    value: _preferences!.remindersEnabled,
+                    onChanged: (value) => _togglePreference(
+                      _preferences!.copyWith(remindersEnabled: value),
                     ),
-                    body:
-                        LocaleKeys.checkSupabaseConnection.tr(context: context),
-                    action: EtzanPrimaryButton(
-                      label: LocaleKeys.retry.tr(context: context),
-                      onPressed: _reloadPreferences,
-                    ),
-                  );
-                }
-
-                final preferences = snapshot.data!;
-                return EtzanCard(
-                  child: Column(
-                    children: [
-                      SwitchListTile(
-                        title: Text(LocaleKeys.reminders.tr(context: context)),
-                        value: preferences.remindersEnabled,
-                        onChanged: _savingPreferences
-                            ? null
-                            : (value) => _updatePreferences(
-                                  preferences.copyWith(
-                                    remindersEnabled: value,
-                                  ),
-                                ),
-                      ),
-                      SwitchListTile(
-                        title: Text(
-                          LocaleKeys.motivationalMessages.tr(context: context),
-                        ),
-                        value: preferences.motivationEnabled,
-                        onChanged: _savingPreferences
-                            ? null
-                            : (value) => _updatePreferences(
-                                  preferences.copyWith(
-                                    motivationEnabled: value,
-                                  ),
-                                ),
-                      ),
-                      SwitchListTile(
-                        title:
-                            Text(LocaleKeys.offersUpdates.tr(context: context)),
-                        value: preferences.offersEnabled,
-                        onChanged: _savingPreferences
-                            ? null
-                            : (value) => _updatePreferences(
-                                  preferences.copyWith(offersEnabled: value),
-                                ),
-                      ),
-                    ],
                   ),
-                );
-              },
+                  SwitchListTile(
+                    title: Text(
+                      LocaleKeys.motivationalMessages.tr(context: context),
+                    ),
+                    value: _preferences!.motivationEnabled,
+                    onChanged: (value) => _togglePreference(
+                      _preferences!.copyWith(motivationEnabled: value),
+                    ),
+                  ),
+                  SwitchListTile(
+                    title:
+                        Text(LocaleKeys.offersUpdates.tr(context: context)),
+                    value: _preferences!.offersEnabled,
+                    onChanged: (value) => _togglePreference(
+                      _preferences!.copyWith(offersEnabled: value),
+                    ),
+                  ),
+                ],
+              ),
             ),
           const SizedBox(height: AppSpacing.lg),
           EtzanSectionTitle(
