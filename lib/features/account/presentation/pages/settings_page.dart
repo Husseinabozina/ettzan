@@ -144,7 +144,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             )
           else if (_loadingPreferences)
-            const EtzanLoadingCard(height: 190),
+            const EtzanLoadingCard(height: 190)
           else if (_preferencesError)
             EtzanEmptyState(
               title: LocaleKeys.notificationPreferencesLoadError.tr(
