@@ -23,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _obscure = true;
   bool _signingIn = false;
+  bool _guestLoading = false;
 
   @override
   void dispose() {
@@ -44,7 +45,14 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<void> _continueAsGuest() => context.read<AuthCubit>().signInAsGuest();
+  Future<void> _continueAsGuest() async {
+    setState(() => _guestLoading = true);
+    try {
+      await context.read<AuthCubit>().signInAsGuest();
+    } finally {
+      if (mounted) setState(() => _guestLoading = false);
+    }
+  }
 
   Future<void> _resetPassword() async {
     final email = _emailController.text.trim();
@@ -150,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
               TextButton(
                 onPressed: state is AuthLoading ? null : _continueAsGuest,
                 child: Text(
-                  state is AuthLoading
+                  _guestLoading
                       ? LocaleKeys.continuingAsGuest.tr(context: context)
                       : LocaleKeys.continueAsGuest.tr(context: context),
                 ),

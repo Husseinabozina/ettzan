@@ -27,6 +27,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _passwordController = TextEditingController();
   bool _obscure = true;
   bool _signingUp = false;
+  bool _guestLoading = false;
 
   @override
   void dispose() {
@@ -50,7 +51,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
   }
 
-  Future<void> _continueAsGuest() => context.read<AuthCubit>().signInAsGuest();
+  Future<void> _continueAsGuest() async {
+    setState(() => _guestLoading = true);
+    try {
+      await context.read<AuthCubit>().signInAsGuest();
+    } finally {
+      if (mounted) setState(() => _guestLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +151,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               TextButton(
                 onPressed: state is AuthLoading ? null : _continueAsGuest,
                 child: Text(
-                  state is AuthLoading
+                  _guestLoading
                       ? LocaleKeys.continuingAsGuest.tr(context: context)
                       : LocaleKeys.continueAsGuest.tr(context: context),
                 ),
