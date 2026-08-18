@@ -113,7 +113,7 @@ abstract final class AppTheme {
       ),
       cardTheme: const CardThemeData(
         elevation: 0,
-        color: AppColors.surface,
+        color: AppColors.card,
         margin: EdgeInsets.zero,
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(
