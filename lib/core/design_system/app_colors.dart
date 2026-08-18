@@ -10,6 +10,7 @@ abstract final class AppColors {
   static const lavenderSoft = Color(0xFFF1ECFC);
   static const background = Color(0xFFF7F9FC);
   static const surface = Color(0xFFFFFFFF);
+  static const card = Color(0xFFF4FBF8);
   static const ink = Color(0xFF102A47);
   static const inkMuted = Color(0xFF60708A);
   static const inkSubtle = Color(0xFF8793A7);

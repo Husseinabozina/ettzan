@@ -151,7 +151,7 @@ class EtzanCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).cardTheme.color ?? AppColors.surface;
+    final color = Theme.of(context).cardTheme.color ?? AppColors.card;
     return DecoratedBox(
       decoration: BoxDecoration(
         color: gradient == null ? color : null,
@@ -475,7 +475,7 @@ class EtzanLoadingCard extends StatelessWidget {
     return Container(
       height: height,
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: AppColors.card,
         borderRadius: BorderRadius.circular(AppRadii.md),
         border: Border.all(color: AppColors.divider),
       ),
