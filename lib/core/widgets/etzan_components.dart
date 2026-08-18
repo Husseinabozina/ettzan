@@ -209,7 +209,7 @@ class EtzanIconTile extends StatelessWidget {
     required this.label,
     this.onTap,
     this.color = AppColors.primary,
-    this.gradient = AppColors.primaryGradient,
+    this.gradient = AppColors.softTealGradient,
     super.key,
   }) : assert(icon != null || iconAsset != null);
 
@@ -248,10 +248,10 @@ class EtzanIconTile extends StatelessWidget {
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context)
-                .textTheme
-                .labelLarge
-                ?.copyWith(color: Colors.white),
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: AppColors.primaryDeep,
+                  fontWeight: FontWeight.w800,
+                ),
           ),
         ],
       ),

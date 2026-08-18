@@ -27,6 +27,12 @@ abstract final class AppColors {
     colors: [Color(0xFF12BDB1), Color(0xFF08AFA4)],
   );
 
+  static const softTealGradient = LinearGradient(
+    begin: AlignmentDirectional.topStart,
+    end: AlignmentDirectional.bottomEnd,
+    colors: [Color(0xFFA9E8DE), Color(0xFF7BD9CD)],
+  );
+
   static const calmGradient = LinearGradient(
     begin: AlignmentDirectional.topStart,
     end: AlignmentDirectional.bottomEnd,
