@@ -33,6 +33,12 @@ abstract final class AppColors {
     colors: [Color(0xFFA9E8DE), Color(0xFF7BD9CD)],
   );
 
+  static const quoteGradient = LinearGradient(
+    begin: AlignmentDirectional.topStart,
+    end: AlignmentDirectional.bottomEnd,
+    colors: [Color(0xFFD9F2EC), Color(0xFFC2E9DF)],
+  );
+
   static const calmGradient = LinearGradient(
     begin: AlignmentDirectional.topStart,
     end: AlignmentDirectional.bottomEnd,

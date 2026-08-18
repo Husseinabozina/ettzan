@@ -79,9 +79,7 @@ class _GuestQuoteCarouselState extends State<GuestQuoteCarousel> {
             itemBuilder: (context, index) => Padding(
               padding: const EdgeInsets.symmetric(horizontal: 2),
               child: EtzanCard(
-                gradient: index.isEven
-                    ? AppColors.heroGradient
-                    : AppColors.calmGradient,
+                gradient: AppColors.quoteGradient,
                 padding: const EdgeInsets.all(AppSpacing.lg),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
