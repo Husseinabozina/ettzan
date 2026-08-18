@@ -37,6 +37,10 @@ class AuthRepositoryImpl implements AuthRepository {
           .signIn(email: email, password: password)
           .timeout(_authTimeout));
     } on AuthException catch (e) {
+      if (e.message.toLowerCase().contains('invalid login credentials')) {
+        // Raw Supabase message -> localized wrong email/password feedback.
+        throw const AppFailure('auth_sign_in_failed', code: 'auth');
+      }
       throw AppFailure(e.message, code: 'auth');
     } on TimeoutException {
       throw const AppFailure('auth_timeout', code: 'auth_timeout');

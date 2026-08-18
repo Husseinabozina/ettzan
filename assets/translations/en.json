@@ -20,7 +20,7 @@
   "article": "Article",
   "audioSession": "Audio session",
   "authSessionRefreshError": "Session expired. Please sign in again.",
-  "authSignInFailed": "Invalid credentials.",
+  "authSignInFailed": "The email or password is incorrect.",
   "authSignUpFailed": "Couldn't create the account.",
   "authSignUpLoginFailed": "Account created, but sign-in failed.",
   "authTimeout": "Sign-in timed out.",

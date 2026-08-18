@@ -20,7 +20,7 @@
   "article": "مقال",
   "audioSession": "جلسة صوتية",
   "authSessionRefreshError": "انتهت الجلسة، سجّل الدخول من جديد.",
-  "authSignInFailed": "بيانات الدخول غير صحيحة.",
+  "authSignInFailed": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
   "authSignUpFailed": "تعذّر إنشاء الحساب.",
   "authSignUpLoginFailed": "تم إنشاء الحساب لكن تعذّر تسجيل الدخول.",
   "authTimeout": "انتهت مهلة تسجيل الدخول.",
