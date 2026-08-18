@@ -22,10 +22,23 @@ class DashboardGreetingCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                EtzanTag(
-                  label: LocaleKeys.onTrack.tr(context: context),
-                  selected: true,
-                ),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.sm,
+                vertical: 4,
+              ),
+              decoration: BoxDecoration(
+                color: AppColors.mintSoft,
+                borderRadius: BorderRadius.circular(AppRadii.pill),
+              ),
+              child: Text(
+                LocaleKeys.onTrack.tr(context: context),
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: AppColors.primaryDeep,
+                      fontWeight: FontWeight.w700,
+                    ),
+              ),
+            ),
                 const SizedBox(height: AppSpacing.md),
                 Text(
                   LocaleKeys.helloUser.tr(
