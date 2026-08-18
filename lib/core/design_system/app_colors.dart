@@ -27,16 +27,16 @@ abstract final class AppColors {
     colors: [Color(0xFF12BDB1), Color(0xFF08AFA4)],
   );
 
-  static const softTealGradient = LinearGradient(
-    begin: AlignmentDirectional.topStart,
-    end: AlignmentDirectional.bottomEnd,
-    colors: [Color(0xFFA9E8DE), Color(0xFF7BD9CD)],
-  );
-
   static const quoteGradient = LinearGradient(
     begin: AlignmentDirectional.topStart,
     end: AlignmentDirectional.bottomEnd,
     colors: [Color(0xFFD9F2EC), Color(0xFFC2E9DF)],
+  );
+
+  static const lavenderGradient = LinearGradient(
+    begin: AlignmentDirectional.topStart,
+    end: AlignmentDirectional.bottomEnd,
+    colors: [Color(0xFFE6DCF8), Color(0xFFCEB9F2)],
   );
 
   static const calmGradient = LinearGradient(
