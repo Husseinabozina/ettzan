@@ -209,6 +209,7 @@ class EtzanIconTile extends StatelessWidget {
     required this.label,
     this.onTap,
     this.color = AppColors.primary,
+    this.gradient = AppColors.calmGradient,
     super.key,
   }) : assert(icon != null || iconAsset != null);
 
@@ -217,11 +218,13 @@ class EtzanIconTile extends StatelessWidget {
   final String label;
   final VoidCallback? onTap;
   final Color color;
+  final Gradient gradient;
 
   @override
   Widget build(BuildContext context) {
     return EtzanCard(
       onTap: onTap,
+      gradient: gradient,
       padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.sm, vertical: AppSpacing.md),
       child: Column(
@@ -231,9 +234,8 @@ class EtzanIconTile extends StatelessWidget {
             width: 54,
             height: 54,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: .11),
+              color: Colors.white.withValues(alpha: .55),
               borderRadius: BorderRadius.circular(AppRadii.md),
-              border: Border.all(color: color.withValues(alpha: .14)),
             ),
             alignment: Alignment.center,
             child: iconAsset != null
