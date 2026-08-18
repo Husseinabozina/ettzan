@@ -27,17 +27,6 @@ class AboutScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacing.md),
                 Text(
-                  LocaleKeys.appName.tr(context: context),
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineMedium
-                      ?.copyWith(
-                        color: AppColors.primaryDeep,
-                        fontWeight: FontWeight.w800,
-                      ),
-                ),
-                const SizedBox(height: AppSpacing.xs),
-                Text(
                   LocaleKeys.tagline.tr(context: context),
                   style: Theme.of(context)
                       .textTheme
