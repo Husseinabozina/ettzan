@@ -209,7 +209,7 @@ class EtzanIconTile extends StatelessWidget {
     required this.label,
     this.onTap,
     this.color = AppColors.primary,
-    this.gradient = AppColors.deepRedGradient,
+    this.gradient = AppColors.primaryGradient,
     super.key,
   }) : assert(icon != null || iconAsset != null);
 

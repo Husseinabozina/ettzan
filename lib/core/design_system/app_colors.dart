@@ -17,11 +17,6 @@ abstract final class AppColors {
   static const success = Color(0xFF1FB982);
   static const warning = Color(0xFFF29A55);
   static const danger = Color(0xFFFF5B7D);
-  static const deepRedGradient = LinearGradient(
-    begin: AlignmentDirectional.topStart,
-    end: AlignmentDirectional.bottomEnd,
-    colors: [Color(0xFF9B1C31), Color(0xFF6E1222)],
-  );
   static const info = Color(0xFF5F8FF7);
   static const divider = Color(0xFFE3E9F1);
   static const shadow = Color(0x1A102A47);
