@@ -140,7 +140,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 label: _signingUp
                     ? LocaleKeys.creatingAccount.tr(context: context)
                     : LocaleKeys.signup.tr(context: context),
-                onPressed: state is AuthLoading ? null : _submit,
+                onPressed: _signingUp ? null : _submit,
               ),
               const SizedBox(height: AppSpacing.sm),
               TextButton(
@@ -149,7 +149,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: Text(LocaleKeys.login.tr(context: context)),
               ),
               TextButton(
-                onPressed: state is AuthLoading ? null : _continueAsGuest,
+                onPressed: _guestLoading ? null : _continueAsGuest,
                 child: Text(
                   _guestLoading
                       ? LocaleKeys.continuingAsGuest.tr(context: context)

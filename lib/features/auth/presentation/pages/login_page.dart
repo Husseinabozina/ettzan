@@ -24,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _obscure = true;
   bool _signingIn = false;
   bool _guestLoading = false;
+  bool _resetting = false;
 
   @override
   void dispose() {
@@ -64,7 +65,12 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       return;
     }
-    await context.read<AuthCubit>().sendPasswordReset(email);
+    setState(() => _resetting = true);
+    try {
+      await context.read<AuthCubit>().sendPasswordReset(email);
+    } finally {
+      if (mounted) setState(() => _resetting = false);
+    }
   }
 
   @override
@@ -136,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Align(
                 alignment: AlignmentDirectional.centerEnd,
                 child: TextButton(
-                  onPressed: state is AuthLoading ? null : _resetPassword,
+                  onPressed: _resetting ? null : _resetPassword,
                   child: Text(
                     LocaleKeys.forgotPassword.tr(context: context),
                   ),
@@ -147,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 label: _signingIn
                     ? LocaleKeys.signingIn.tr(context: context)
                     : LocaleKeys.login.tr(context: context),
-                onPressed: state is AuthLoading ? null : _submit,
+                onPressed: _signingIn ? null : _submit,
               ),
               const SizedBox(height: AppSpacing.sm),
               TextButton(
@@ -156,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Text(LocaleKeys.signup.tr(context: context)),
               ),
               TextButton(
-                onPressed: state is AuthLoading ? null : _continueAsGuest,
+                onPressed: _guestLoading ? null : _continueAsGuest,
                 child: Text(
                   _guestLoading
                       ? LocaleKeys.continuingAsGuest.tr(context: context)
