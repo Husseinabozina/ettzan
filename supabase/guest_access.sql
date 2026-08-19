@@ -17,6 +17,7 @@
 
 -- ---------------------------------------------------------------------------
 -- 1. Block anonymous users on personal tables
+--    (profiles SELECT has a coach carve-out below so guests can browse coaches)
 -- ---------------------------------------------------------------------------
 DO $$
 DECLARE
@@ -47,10 +48,6 @@ BEGIN
       'drop policy if exists "block anonymous delete on %s" on public.%s', t, t);
 
     EXECUTE format(
-      'create policy "block anonymous select on %s" on public.%s as restrictive
-         for select to authenticated
-         using ((select (auth.jwt()->>''is_anonymous'')::boolean) is false)', t, t);
-    EXECUTE format(
       'create policy "block anonymous insert on %s" on public.%s as restrictive
          for insert to authenticated
          with check ((select (auth.jwt()->>''is_anonymous'')::boolean) is false)', t, t);
@@ -65,6 +62,48 @@ BEGIN
          using ((select (auth.jwt()->>''is_anonymous'')::boolean) is false)', t, t);
   END LOOP;
 END $$;
+
+-- Generic block for non-profile tables; coach profile rows stay readable so
+-- guests can browse coaches (names + avatars).
+DO $$
+DECLARE
+  t text;
+  tables text[] := ARRAY[
+    'goals',
+    'goal_milestones',
+    'habits',
+    'habit_logs',
+    'journal_entries',
+    'bookings',
+    'user_subscriptions',
+    'user_preferences',
+    'notifications',
+    'messages',
+    'conversations'
+  ];
+BEGIN
+  FOREACH t IN ARRAY tables LOOP
+    EXECUTE format(
+      'create policy "block anonymous select on %s" on public.%s as restrictive
+         for select to authenticated
+         using ((select (auth.jwt()->>''is_anonymous'')::boolean) is false)', t, t);
+  END LOOP;
+END $$;
+
+grant execute on function public.current_user_role() to anon, authenticated;
+
+drop policy if exists "profiles_coach_read" on public.profiles;
+create policy "profiles_coach_read" on public.profiles
+  for select to anon, authenticated
+  using (exists (select 1 from public.coach_profiles cp where cp.user_id = profiles.id));
+
+drop policy if exists "block anonymous select on profiles" on public.profiles;
+create policy "block anonymous select on profiles" on public.profiles as restrictive
+  for select to authenticated
+  using (
+    ((select (auth.jwt()->>'is_anonymous')::boolean) is false)
+    or exists (select 1 from public.coach_profiles cp where cp.user_id = profiles.id)
+  );
 
 -- ---------------------------------------------------------------------------
 -- 2. Let anonymous users read public data
