@@ -5,6 +5,7 @@ import 'package:etzan_life_coaching/core/design_system/app_colors.dart';
 import 'package:etzan_life_coaching/core/design_system/app_tokens.dart';
 import 'package:etzan_life_coaching/core/localization/generated/locale_keys.g.dart';
 import 'package:etzan_life_coaching/core/widgets/etzan_components.dart';
+import 'package:etzan_life_coaching/features/account/presentation/components/plan_labels.dart';
 
 class PlanCard extends StatelessWidget {
   const PlanCard({
@@ -108,7 +109,7 @@ class PlanCard extends StatelessWidget {
                 children: [
                   const Icon(Icons.check_circle, color: AppColors.success),
                   const SizedBox(width: 10),
-                  Expanded(child: Text(feature)),
+                  Expanded(child: Text(planFeatureLabel(context, feature))),
                 ],
               ),
             ),

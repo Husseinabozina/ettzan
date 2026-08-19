@@ -128,6 +128,14 @@ abstract class LocaleKeys {
   static const etzanCoach = 'etzanCoach';
   static const etzanResources = 'etzanResources';
   static const everyDay = 'everyDay';
+  static const featureBasicGoals = 'featureBasicGoals';
+  static const featureBasicHabits = 'featureBasicHabits';
+  static const featureCoachChat = 'featureCoachChat';
+  static const featureLimitedResources = 'featureLimitedResources';
+  static const featurePremiumResources = 'featurePremiumResources';
+  static const featureProgressInsights = 'featureProgressInsights';
+  static const featureUnlimitedGoals = 'featureUnlimitedGoals';
+  static const featureUnlimitedHabits = 'featureUnlimitedHabits';
   static const featured = 'featured';
   static const focusToday = 'focusToday';
   static const forgotPassword = 'forgotPassword';
