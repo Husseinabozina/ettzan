@@ -12,12 +12,14 @@ class GoalCard extends StatelessWidget {
     required this.goal,
     required this.isUpdating,
     required this.onProgressChanged,
+    this.readOnly = false,
     super.key,
   });
 
   final GoalItem goal;
   final bool isUpdating;
   final ValueChanged<double> onProgressChanged;
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -59,33 +61,52 @@ class GoalCard extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: AppSpacing.sm),
-          Row(
-            children: [
-              IconButton.outlined(
-                tooltip: LocaleKeys.decreaseProgress.tr(context: context),
-                onPressed: isUpdating || progress <= 0
-                    ? null
-                    : () => onProgressChanged(progress - .1),
-                icon: const Icon(Icons.remove),
-              ),
-              const SizedBox(width: AppSpacing.xs),
-              IconButton.filledTonal(
-                tooltip: LocaleKeys.increaseProgress.tr(context: context),
-                onPressed: isUpdating || progress >= 1
-                    ? null
-                    : () => onProgressChanged(progress + .1),
-                icon: const Icon(Icons.add),
-              ),
-              const Spacer(),
-              TextButton.icon(
-                onPressed: isUpdating || progress >= 1
-                    ? null
-                    : () => onProgressChanged(1),
-                icon: const Icon(Icons.check_circle_outline),
-                label: Text(LocaleKeys.markCompleted.tr(context: context)),
-              ),
-            ],
-          ),
+          if (readOnly)
+            Row(
+              children: [
+                const Icon(
+                  Icons.check_circle,
+                  color: AppColors.success,
+                  size: 20,
+                ),
+                const SizedBox(width: AppSpacing.xs),
+                Text(
+                  LocaleKeys.goalCompleted.tr(context: context),
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: AppColors.success,
+                        fontWeight: FontWeight.w800,
+                      ),
+                ),
+              ],
+            )
+          else
+            Row(
+              children: [
+                IconButton.outlined(
+                  tooltip: LocaleKeys.decreaseProgress.tr(context: context),
+                  onPressed: isUpdating || progress <= 0
+                      ? null
+                      : () => onProgressChanged(progress - .1),
+                  icon: const Icon(Icons.remove),
+                ),
+                const SizedBox(width: AppSpacing.xs),
+                IconButton.filledTonal(
+                  tooltip: LocaleKeys.increaseProgress.tr(context: context),
+                  onPressed: isUpdating || progress >= 1
+                      ? null
+                      : () => onProgressChanged(progress + .1),
+                  icon: const Icon(Icons.add),
+                ),
+                const Spacer(),
+                TextButton.icon(
+                  onPressed: isUpdating || progress >= 1
+                      ? null
+                      : () => onProgressChanged(1),
+                  icon: const Icon(Icons.check_circle_outline),
+                  label: Text(LocaleKeys.markCompleted.tr(context: context)),
+                ),
+              ],
+            ),
         ],
       ),
     );

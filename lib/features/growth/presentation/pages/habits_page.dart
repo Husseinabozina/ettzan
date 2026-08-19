@@ -40,7 +40,7 @@ class _HabitsScreenState extends State<HabitsScreen> {
           await getIt<EtzanBackendRepository>().getAllActiveHabits();
       if (!mounted) return;
       setState(() {
-        _habits = habits;
+        _habits = List.of(habits);
         _loading = false;
       });
     } catch (_) {

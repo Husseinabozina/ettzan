@@ -124,7 +124,12 @@ abstract final class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.surface,
-        labelStyle: textTheme.bodyMedium?.copyWith(color: AppColors.inkMuted),
+        labelStyle:
+            textTheme.bodyMedium?.copyWith(color: AppColors.inkMuted, height: 1.2),
+        floatingLabelStyle: textTheme.bodyMedium?.copyWith(
+          color: AppColors.primary,
+          height: 1.2,
+        ),
         hintStyle: textTheme.bodyMedium?.copyWith(color: AppColors.inkSubtle),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.md,

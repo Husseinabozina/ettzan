@@ -53,8 +53,33 @@ class _GoalsOverviewScreenState extends State<GoalsOverviewScreen> {
   Future<void> _updateGoal(GoalItem goal, double progress) async {
     if (_updatingGoalIds.contains(goal.id)) return;
 
-    final previousGoals = List<GoalItem>.from(_goals ?? const []);
     final updatedProgress = progress.clamp(0.0, 1.0).toDouble();
+    final willComplete = updatedProgress >= 1 && !goal.isCompleted;
+    if (willComplete) {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(
+            LocaleKeys.goalCompleteConfirmTitle.tr(context: context),
+          ),
+          content:
+              Text(LocaleKeys.goalCompleteConfirmBody.tr(context: context)),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(LocaleKeys.cancel.tr(context: context)),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(LocaleKeys.confirm.tr(context: context)),
+            ),
+          ],
+        ),
+      );
+      if (confirmed != true || !mounted) return;
+    }
+
+    final previousGoals = List<GoalItem>.from(_goals ?? const []);
     setState(() {
       _updatingGoalIds.add(goal.id);
       _goals = previousGoals
@@ -129,6 +154,8 @@ class _GoalsOverviewScreenState extends State<GoalsOverviewScreen> {
           final goals = _goals ?? snapshot.data ?? const <GoalItem>[];
           final activeGoals =
               goals.where((goal) => !goal.isCompleted).toList(growable: false);
+          final completedGoals =
+              goals.where((goal) => goal.isCompleted).toList(growable: false);
           final ratio = goals.isEmpty
               ? 0.0
               : goals.map((goal) => goal.progress).reduce((a, b) => a + b) /
@@ -163,6 +190,28 @@ class _GoalsOverviewScreenState extends State<GoalsOverviewScreen> {
                       .toList(),
                 ),
               const SizedBox(height: AppSpacing.lg),
+              if (completedGoals.isNotEmpty) ...[
+                EtzanSectionTitle(
+                  title: LocaleKeys.completedGoals.tr(context: context),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                AdaptiveGrid(
+                  phone: 1,
+                  tablet: 2,
+                  desktop: 3,
+                  children: completedGoals
+                      .map(
+                        (goal) => GoalCard(
+                          goal: goal,
+                          isUpdating: false,
+                          readOnly: true,
+                          onProgressChanged: (_) {},
+                        ),
+                      )
+                      .toList(),
+                ),
+                const SizedBox(height: AppSpacing.lg),
+              ],
               EtzanCard(
                 gradient: AppColors.calmGradient,
                 child: Row(

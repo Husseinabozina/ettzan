@@ -39,7 +39,7 @@ class _DailyPlanScreenState extends State<DailyPlanScreen> {
           await getIt<EtzanBackendRepository>().getHabitsForToday();
       if (!mounted) return;
       setState(() {
-        _habits = habits;
+        _habits = List.of(habits);
         _loading = false;
       });
     } catch (_) {
