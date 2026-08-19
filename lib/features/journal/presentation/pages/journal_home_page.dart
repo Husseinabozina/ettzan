@@ -22,6 +22,31 @@ class JournalHomeScreen extends StatefulWidget {
 class _JournalHomeScreenState extends State<JournalHomeScreen> {
   late Future<List<JournalEntryItem>> _future =
       getIt<EtzanBackendRepository>().getJournalEntries();
+  final _scrollController = ScrollController();
+  bool _fabVisible = true;
+  double _lastScrollOffset = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_handleScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _handleScroll() {
+    final offset = _scrollController.offset;
+    if (offset > _lastScrollOffset + 8 && offset > 120) {
+      if (_fabVisible) setState(() => _fabVisible = false);
+    } else if (offset < _lastScrollOffset - 8 || offset <= 120) {
+      if (!_fabVisible) setState(() => _fabVisible = true);
+    }
+    _lastScrollOffset = offset;
+  }
 
   void _reload() {
     setState(() {
@@ -46,10 +71,19 @@ class _JournalHomeScreenState extends State<JournalHomeScreen> {
           icon: const Icon(Icons.insights),
         ),
       ],
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _openNewEntry,
-        icon: const Icon(Icons.edit_outlined),
-        label: Text(LocaleKeys.newEntry.tr(context: context)),
+      floatingActionButton: AnimatedScale(
+        scale: _fabVisible ? 1 : 0,
+        duration: AppDurations.fast,
+        curve: Curves.easeOutCubic,
+        child: AnimatedOpacity(
+          opacity: _fabVisible ? 1 : 0,
+          duration: AppDurations.fast,
+          child: FloatingActionButton.extended(
+            onPressed: _openNewEntry,
+            icon: const Icon(Icons.edit_outlined),
+            label: Text(LocaleKeys.newEntry.tr(context: context)),
+          ),
+        ),
       ),
       child: FutureBuilder<List<JournalEntryItem>>(
         future: _future,
@@ -81,6 +115,7 @@ class _JournalHomeScreenState extends State<JournalHomeScreen> {
           final entries = snapshot.data ?? const <JournalEntryItem>[];
 
           return ListView(
+            controller: _scrollController,
             padding: journalFloatingActionListPadding,
             children: [
               EtzanSectionTitle(
