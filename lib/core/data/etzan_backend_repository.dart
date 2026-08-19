@@ -518,6 +518,7 @@ class EtzanBackendRepository {
     required String title,
     String iconKey = 'habit',
     String frequency = 'daily',
+    List<int>? days,
   }) async {
     final trimmedTitle = title.trim();
     if (trimmedTitle.isEmpty) {
@@ -525,26 +526,118 @@ class EtzanBackendRepository {
           code: 'invalid_habit');
     }
 
+    final nextOrder = await _nextHabitSortOrder();
+
     await _supabase.from('habits').insert({
       'user_id': _userId,
       'title': trimmedTitle,
       'icon_key': iconKey,
       'frequency': frequency,
+      'days_of_week': days,
+      'sort_order': nextOrder,
       'is_active': true,
     });
   }
 
-  Future<List<HabitStatusItem>> getHabitsForToday() async {
-    final userId = _userId;
-    final today = DateTime.now().toIso8601String().substring(0, 10);
-    final habits = await _supabase
+  Future<int> _nextHabitSortOrder() async {
+    final rows = await _supabase
         .from('habits')
-        .select('id,title,icon_key,frequency,is_active,created_at')
+        .select('sort_order')
+        .eq('user_id', _userId)
+        .eq('is_active', true)
+        .order('sort_order', ascending: false)
+        .limit(1);
+    final maxOrder = rows.isEmpty
+        ? -1
+        : (rows.first as Map)['sort_order'] as num? ?? 0;
+    return maxOrder.toInt() + 1;
+  }
+
+  Future<void> renameHabit({required String habitId, required String title}) async {
+    final trimmedTitle = title.trim();
+    if (trimmedTitle.isEmpty) {
+      throw const AppFailure(LocaleKeys.habitNameRequired,
+          code: 'invalid_habit');
+    }
+    await _supabase
+        .from('habits')
+        .update({'title': trimmedTitle, 'updated_at': DateTime.now().toUtc().toIso8601String()})
+        .eq('id', habitId);
+  }
+
+  Future<void> deleteHabit(String habitId) async {
+    await _supabase
+        .from('habits')
+        .update({'is_active': false, 'updated_at': DateTime.now().toUtc().toIso8601String()})
+        .eq('id', habitId);
+  }
+
+  Future<void> updateHabitDays({
+    required String habitId,
+    required List<int>? days,
+  }) async {
+    await _supabase
+        .from('habits')
+        .update({
+          'days_of_week': days,
+          'updated_at': DateTime.now().toUtc().toIso8601String(),
+        })
+        .eq('id', habitId);
+  }
+
+  Future<void> reorderHabits(List<String> habitIds) async {
+    final userId = _userId;
+    final all = await _supabase
+        .from('habits')
+        .select('id,sort_order')
         .eq('user_id', userId)
         .eq('is_active', true)
+        .order('sort_order')
+        .order('created_at');
+    final reordered = habitIds.toSet();
+    final others = (all as List<dynamic>)
+        .map((row) => (row as Map)['id'] as String)
+        .where((id) => !reordered.contains(id))
+        .toList();
+    final finalOrder = [...habitIds, ...others];
+    for (var index = 0; index < finalOrder.length; index++) {
+      await _supabase
+          .from('habits')
+          .update({
+            'sort_order': index,
+            'updated_at': DateTime.now().toUtc().toIso8601String(),
+          })
+          .eq('id', finalOrder[index]);
+    }
+  }
+
+  Future<List<HabitStatusItem>> getAllActiveHabits() =>
+      _loadHabits(daysFiltered: false);
+
+  Future<List<HabitStatusItem>> getHabitsForToday() =>
+      _loadHabits(daysFiltered: true);
+
+  Future<List<HabitStatusItem>> _loadHabits({
+    required bool daysFiltered,
+  }) async {
+    final userId = _userId;
+    final today = DateTime.now().toIso8601String().substring(0, 10);
+    final weekday = DateTime.now().weekday;
+    final habits = await _supabase
+        .from('habits')
+        .select('id,title,icon_key,frequency,is_active,created_at,sort_order,days_of_week')
+        .eq('user_id', userId)
+        .eq('is_active', true)
+        .order('sort_order')
         .order('created_at');
     final habitRows = (habits as List<dynamic>)
         .map((row) => Map<String, dynamic>.from(row as Map))
+        .where((row) {
+          if (!daysFiltered) return true;
+          final days = row['days_of_week'] as List?;
+          if (days == null || days.isEmpty) return true;
+          return days.any((day) => (day as num).toInt() == weekday);
+        })
         .toList();
     if (habitRows.isEmpty) return const [];
     final habitIds = habitRows.map((row) => row['id'] as String).toList();
@@ -1031,6 +1124,8 @@ class HabitStatusItem {
     required this.iconKey,
     required this.frequency,
     required this.completedToday,
+    this.sortOrder = 0,
+    this.days,
   });
 
   factory HabitStatusItem.fromJson(
@@ -1043,6 +1138,10 @@ class HabitStatusItem {
         iconKey: json['icon_key'] as String? ?? 'habit',
         frequency: json['frequency'] as String? ?? 'daily',
         completedToday: completedToday,
+        sortOrder: (json['sort_order'] as num?)?.toInt() ?? 0,
+        days: (json['days_of_week'] as List?)
+            ?.map((item) => (item as num).toInt())
+            .toList(growable: false),
       );
 
   final String id;
@@ -1050,6 +1149,28 @@ class HabitStatusItem {
   final String iconKey;
   final String frequency;
   final bool completedToday;
+  final int sortOrder;
+  final List<int>? days;
+
+  /// True when the habit should appear on the given weekday (null/empty = daily).
+  bool showsOn(int weekday) => days == null || days!.isEmpty || days!.contains(weekday);
+
+  HabitStatusItem copyWith({
+    String? title,
+    String? iconKey,
+    bool? completedToday,
+    int? sortOrder,
+    List<int>? days,
+  }) =>
+      HabitStatusItem(
+        id: id,
+        title: title ?? this.title,
+        iconKey: iconKey ?? this.iconKey,
+        frequency: frequency,
+        completedToday: completedToday ?? this.completedToday,
+        sortOrder: sortOrder ?? this.sortOrder,
+        days: days ?? this.days,
+      );
 }
 
 class JournalEntryItem {

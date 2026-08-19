@@ -103,9 +103,21 @@ abstract class LocaleKeys {
   static const dark = 'dark';
   static const dashboardLoadError = 'dashboardLoadError';
   static const dashboardLoadRetry = 'dashboardLoadRetry';
+  static const dayFriday = 'dayFriday';
+  static const dayMonday = 'dayMonday';
+  static const daySaturday = 'daySaturday';
+  static const daySunday = 'daySunday';
+  static const dayThursday = 'dayThursday';
+  static const dayTuesday = 'dayTuesday';
+  static const dayWednesday = 'dayWednesday';
   static const decreaseProgress = 'decreaseProgress';
+  static const deleteHabit = 'deleteHabit';
+  static const deleteHabitConfirmBody = 'deleteHabitConfirmBody';
+  static const deleteHabitConfirmTitle = 'deleteHabitConfirmTitle';
   static const discoverCoach = 'discoverCoach';
+  static const done = 'done';
   static const durationMinutes = 'durationMinutes';
+  static const editHabit = 'editHabit';
   static const editName = 'editName';
   static const editProfile = 'editProfile';
   static const email = 'email';
@@ -113,6 +125,7 @@ abstract class LocaleKeys {
   static const enterEmailFirst = 'enterEmailFirst';
   static const etzanCoach = 'etzanCoach';
   static const etzanResources = 'etzanResources';
+  static const everyDay = 'everyDay';
   static const featured = 'featured';
   static const focusToday = 'focusToday';
   static const forgotPassword = 'forgotPassword';
@@ -150,6 +163,9 @@ abstract class LocaleKeys {
   static const guestQuoteTwo = 'guestQuoteTwo';
   static const guestSignInError = 'guestSignInError';
   static const habitCreateError = 'habitCreateError';
+  static const habitDays = 'habitDays';
+  static const habitDeleteError = 'habitDeleteError';
+  static const habitIcon = 'habitIcon';
   static const habitName = 'habitName';
   static const habitNameHint = 'habitNameHint';
   static const habitNameRequired = 'habitNameRequired';
@@ -264,6 +280,7 @@ abstract class LocaleKeys {
   static const pending = 'pending';
   static const persistence = 'persistence';
   static const planAvailableFromSupabase = 'planAvailableFromSupabase';
+  static const planEdit = 'planEdit';
   static const planSelected = 'planSelected';
   static const planSelectionError = 'planSelectionError';
   static const pm = 'pm';

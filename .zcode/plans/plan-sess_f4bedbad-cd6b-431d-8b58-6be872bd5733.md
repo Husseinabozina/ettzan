@@ -1,44 +1,32 @@
-# إصلاح التبويظ وإكمال Refactor تطبيق Etzan
+# التعديل الكلي للخطة اليومية
 
-## تشخيص الخراب (3 مشاكل أساسية)
-1. **ملفات journal وcoaching في مكان غلط**: `lib/features/journal/pages/` و `lib/features/coaching/pages/` لازم يكونوا تحت `presentation/` — ده بيكسر 25 import (الراوتر + الملفات الداخلية كلها بتستورد من `presentation/...`).
-2. **شاشة الرئيسية للمستخدم المسجل ضايعة**: `home_dashboard_page.dart` (`HomeDashboardScreen`) مش موجودة خالص — بس الـ Cubit والـ domain كاملين وموجودين.
-3. **ملفات الترجمة محذوفة**: `assets/translations/` فاضية، والكود بيستخدم 347 مفتاح. النسخة الوحيدة الموجودة في كاش البيلد فيها 117 مفتاح بس.
+## المرحلة 1: قاعدة البيانات (Supabase)
+إضافة عمودين لجدول `habits`:
+- `sort_order int not null default 0` — ترتيب المهام.
+- `days_of_week int[]` — أيام ظهور المهمة (أرقام 1-7، فاضي = كل يوم).
 
-## المرحلة 0: حماية قبل أي تعديل
-- `git init` + commit أولي للمشروع كله كـ snapshot — عشان أي حاجة تحصل نقدر نرجع، والمشروع رايح للجيت هاب أصلًا.
+كتابة `supabase/habit_plan_edit.sql` (آمن للتكرار) + تنفيذه مباشرة عبر صلاحياتي على المشروع + التحقق من الأعمدة.
 
-## المرحلة 1: إصلاح البنية المكسورة
-1. نقل `lib/features/journal/{pages,components}/` → `lib/features/journal/presentation/{pages,components}/` (نقل المجلدات هيصلح كل الـ imports المكسورة مرة واحدة بدون تعديل كود، لأن كل الاستيرادات أصلاً بتحتسب مسار `presentation/`).
-2. نفس النقل لـ `lib/features/coaching/`.
-3. إعادة كتابة `lib/features/dashboard/presentation/pages/home_dashboard_page.dart` بيها `HomeDashboardScreen`:
-   - `BlocBuilder` على `DashboardCubit` بحالات loading / failure / success.
-   - Success: تحية بالاسم + الرسالة التحفيزية اليومية (dailyNudge)، مؤشر التقدم الشهري، إحصائيات (جلسات مكتملة / ساعات دعم / مهام مكتملة)، كارت الجلسة القادمة لو موجودة.
-   - نفس الـ design system بتاع `GuestHomePage` (EtzanShell, EtzanCard, AdaptiveGrid, EtzanIconTile) وكل النصوص `LocaleKeys.xxx.tr(context: context)`.
+## المرحلة 2: طبقة البيانات (`etzan_backend_repository.dart`)
+- عمليات جديدة: `renameHabit`، `deleteHabit` (حذف ناعم `is_active=false` للحفاظ على سجل الإنجاز)، `reorderHabits` (حفظ الترتيب)، `updateHabitDays`.
+- تعديل `getHabitsForToday`: جلب الأعمدة الجديدة + فلترة حسب يوم الأسبوع الحالي + ترتيب حسب `sort_order`.
+- تعديل `createHabit`: يقبل أيام محددة + `sort_order` تلقائي في الآخر.
+- تطوير `HabitStatusItem`: حقول `sortOrder` و `days` + `copyWith`.
 
-## المرحلة 2: استرجاع الترجمات (أصعب شغلة)
-4. نسخ `ar.json` و `en.json` من كاش البيلد (`build/app/intermediates/flutter/debug/flutter_assets/assets/translations/`) لـ `assets/translations/` كأساس موثوق (117 مفتاح).
-5. استخراج قائمة الـ 230 مفتاح الناقص بمقارنة `locale_keys.g.dart` بالـ JSON.
-6. لكل مفتاح ناقص: تحديد سياق استخدامه في الكود (`grep` على `LocaleKeys.xxx`) وكتابة قيمة عربية + إنجليزية مناسبة، مع الالتزام بصيغة الـ placeholders (`{name}`) في المفاتيح اللي بتستقبل args.
-7. التأكد إن `ar.json` و `en.json` عندهم نفس المفاتيح بالظبط.
-   - ملاحظة: القيم العربية الثابتة في `journal_labels.dart` ('امتنان'، 'قلق'...) هي قيم بيانات بتتخزن في Supabase مش نصوص واجهة — تفضل زي ما هي زي ما اتفقنا قبل كده.
+## المرحلة 3: صفحة الخطة اليومية — وضع تحرير كامل
+- زر "تعديل" أعلى الصفحة (أيقونة قلم) يفعّل وضع التحرير، وزر "تم" يخرج منه.
+- في وضع التحرير كل مهمة تعرض: **مقبض سحب** (إعادة ترتيب) + **قلم** (تعديل) + **سلة** (حذف).
+- إعادة الترتيب بالسحب (`ReorderableListView`) — نقل فوري + حفظ في الخلفية.
+- حوار التعديل: الاسم + الأيقونة + **أيام الأسبوع** (7 أيام، ولا شيء محدد = كل يوم).
+- الحذف برسالة تأكيد ثم إزالة فورية.
+- كل العمليات متفائلة (فورية بدون أي إعادة تحميل) مع رجوع الحالة + رسالة خطأ عند الفشل — نفس النمط المعمول في الصفحة حاليًا.
 
-## المرحلة 3: فصل auth_screens.dart (آخر ملف مجمّع، 617 سطر)
-8. تفكيكه لـ:
-   - `presentation/pages/`: splash, onboarding_goals, onboarding_coach, login, sign_up.
-   - `presentation/components/`: الـ layout المشترك والـ widgets الخاصة (_AuthLayout, _SoftOrb, _OnboardingLayout).
-   - الحفاظ على زر "الدخول كضيف" المضاف في Login/SignUp/Onboarding.
-   - حذف `auth_screens.dart` وتحديث `app_router.dart`.
+## المرحلة 4: صفحة تتبع العادات — نفس المعاملة
+- تحويلها للنمط الفوري (بدون reload زي ما هي الصفحة دي).
+- نفس أزرار تعديل/حذف على كل عادة + حوار الإضافة يكسب اختيار الأيام.
+- مكونات مشتركة (حوار التعديل + حوار تأكيد الحذف) في `features/growth/presentation/components/` تُستخدم في الصفحتين.
 
-## المرحلة 4: التحقق الكامل
-9. `./tool/generate_localization.sh` — إعادة توليد `LocaleKeys` من الـ JSON الجديد (لو الأسماء صح، هيتطابق مع الموجود).
-10. `dart format` + `flutter analyze` → صفر أخطاء.
-11. `flutter test` → كل الاختبارات تعدّي.
-12. `python3 tool/quality_check.py` → لازم يعدّي بـ 26 شاشة (هيرجع 26 مع رجوع HomeDashboardScreen).
-13. Commit لكل مرحلة على حدة في الجيت الجديد.
-
-## النتيجة النهائية المتوقعة
-- كل الـ features السبعة على نفس البنية: `presentation/{pages,components}` بدون أي ملف `*_screens.dart` مجمّع.
-- صفر نصوص UI عربية ثابتة، الترجمة كاملة عربي/إنجليزي مع RTL/LTR.
-- Guest mode شغال مع حماية الراوتر.
-- كل الـ checks خضرا وجاهز للجيت هاب.
+## المرحلة 5: الترجمات والتحقق
+- ~18 مفتاح ترجمة جديد (تعديل/حذف/تأكيد/أيام السبت-الجمعة/رسائل النجاح والفشل) عربي + إنجليزي + تشغيل سكريبت التوليد.
+- `flutter analyze` + `flutter test` + `quality_check` (عدد الشاشات ثابت 31 — الحوارات مكونات مش شاشات).
+- Commit واحد شامل للميزة.

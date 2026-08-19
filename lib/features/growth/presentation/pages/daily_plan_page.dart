@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:etzan_life_coaching/core/data/etzan_backend_repository.dart';
 import 'package:etzan_life_coaching/core/design_system/app_colors.dart';
@@ -6,6 +7,7 @@ import 'package:etzan_life_coaching/core/design_system/app_tokens.dart';
 import 'package:etzan_life_coaching/core/di/injection.dart';
 import 'package:etzan_life_coaching/core/localization/generated/locale_keys.g.dart';
 import 'package:etzan_life_coaching/core/widgets/etzan_components.dart';
+import 'package:etzan_life_coaching/features/growth/presentation/components/habit_dialogs.dart';
 import 'package:etzan_life_coaching/features/growth/presentation/components/plan_task_tile.dart';
 
 class DailyPlanScreen extends StatefulWidget {
@@ -19,6 +21,7 @@ class _DailyPlanScreenState extends State<DailyPlanScreen> {
   List<HabitStatusItem>? _habits;
   bool _loading = true;
   bool _error = false;
+  bool _editMode = false;
 
   @override
   void initState() {
@@ -54,11 +57,7 @@ class _DailyPlanScreenState extends State<DailyPlanScreen> {
     final index = _habits?.indexWhere((item) => item.id == habit.id) ?? -1;
     if (index == -1) return;
     final previous = _habits![index];
-    final updated = HabitStatusItem(
-      id: previous.id,
-      title: previous.title,
-      iconKey: previous.iconKey,
-      frequency: previous.frequency,
+    final updated = previous.copyWith(
       completedToday: !previous.completedToday,
     );
     setState(() => _habits![index] = updated);
@@ -87,6 +86,97 @@ class _DailyPlanScreenState extends State<DailyPlanScreen> {
     }
   }
 
+  void _onReorder(int oldIndex, int newIndex) {
+    final habits = _habits;
+    if (habits == null) return;
+    setState(() {
+      if (newIndex > oldIndex) newIndex -= 1;
+      final item = habits.removeAt(oldIndex);
+      habits.insert(newIndex, item);
+    });
+    _saveOrder();
+  }
+
+  Future<void> _saveOrder() async {
+    try {
+      await getIt<EtzanBackendRepository>()
+          .reorderHabits(_habits!.map((habit) => habit.id).toList());
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(LocaleKeys.taskUpdateError.tr(context: context))),
+      );
+      _load();
+    }
+  }
+
+  Future<void> _editHabit(HabitStatusItem habit) async {
+    final result = await showHabitEditDialog(
+      context,
+      initialTitle: habit.title,
+      initialIconKey: habit.iconKey,
+      initialDays: habit.days,
+    );
+    if (result == null || !mounted) return;
+    final index = _habits?.indexWhere((item) => item.id == habit.id) ?? -1;
+    if (index == -1) return;
+    final previous = _habits![index];
+    final updated = previous.copyWith(
+      title: result.title,
+      iconKey: result.iconKey,
+      days: result.days,
+    );
+    setState(() => _habits![index] = updated);
+    _saveEdit(previous, updated);
+  }
+
+  Future<void> _saveEdit(
+    HabitStatusItem previous,
+    HabitStatusItem next,
+  ) async {
+    try {
+      final repository = getIt<EtzanBackendRepository>();
+      if (next.title != previous.title) {
+        await repository.renameHabit(habitId: next.id, title: next.title);
+      }
+      if (!listEquals(previous.days, next.days)) {
+        await repository.updateHabitDays(habitId: next.id, days: next.days);
+      }
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        final index =
+            _habits?.indexWhere((item) => item.id == next.id) ?? -1;
+        if (index != -1) _habits![index] = previous;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(LocaleKeys.habitUpdateError.tr(context: context))),
+      );
+    }
+  }
+
+  Future<void> _deleteHabit(HabitStatusItem habit) async {
+    final confirmed = await showHabitDeleteDialog(context);
+    if (!confirmed || !mounted) return;
+    final index = _habits?.indexWhere((item) => item.id == habit.id) ?? -1;
+    if (index == -1) return;
+    final removed = _habits!.removeAt(index);
+    setState(() {});
+    _saveDelete(removed);
+  }
+
+  Future<void> _saveDelete(HabitStatusItem habit) async {
+    try {
+      await getIt<EtzanBackendRepository>().deleteHabit(habit.id);
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(LocaleKeys.habitDeleteError.tr(context: context))),
+      );
+      _load();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final habits = _habits ?? const <HabitStatusItem>[];
@@ -94,6 +184,17 @@ class _DailyPlanScreenState extends State<DailyPlanScreen> {
 
     return EtzanPage(
       title: LocaleKeys.dailyPlan.tr(context: context),
+      actions: [
+        if (habits.isNotEmpty && !_loading && !_error)
+          TextButton(
+            onPressed: () => setState(() => _editMode = !_editMode),
+            child: Text(
+              _editMode
+                  ? LocaleKeys.done.tr(context: context)
+                  : LocaleKeys.planEdit.tr(context: context),
+            ),
+          ),
+      ],
       child: ListView(
         children: [
           EtzanCard(
@@ -131,6 +232,29 @@ class _DailyPlanScreenState extends State<DailyPlanScreen> {
             EtzanEmptyState(
               title: LocaleKeys.noTodayTasks.tr(context: context),
               body: LocaleKeys.noTodayTasksDescription.tr(context: context),
+            )
+          else if (_editMode)
+            ReorderableListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: habits.length,
+              onReorder: _onReorder,
+              itemBuilder: (context, index) {
+                final habit = habits[index];
+                return ReorderableDragStartListener(
+                  key: ValueKey(habit.id),
+                  index: index,
+                  child: PlanTaskTile(
+                    index: index + 1,
+                    title: habit.title,
+                    checked: habit.completedToday,
+                    onTap: () {},
+                    editMode: true,
+                    onEdit: () => _editHabit(habit),
+                    onDelete: () => _deleteHabit(habit),
+                  ),
+                );
+              },
             )
           else
             ...habits.take(5).toList().asMap().entries.map(
