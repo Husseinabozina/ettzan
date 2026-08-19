@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:etzan_life_coaching/core/error/app_failure.dart';
 import 'package:etzan_life_coaching/core/localization/generated/locale_keys.g.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -87,6 +89,31 @@ class EtzanBackendRepository {
       'updated_at': DateTime.now().toUtc().toIso8601String(),
     }).eq('id', _userId);
     await _supabase.auth.updateUser(UserAttributes(data: {'full_name': name}));
+  }
+
+  /// Uploads a new profile photo (under the caller's own storage folder per
+  /// RLS) and links it on the profile row. A unique filename per upload keeps
+  /// image caches from serving the previous photo.
+  Future<String> changeProfileAvatar(Uint8List bytes) async {
+    final userId = _userId;
+    if (bytes.isEmpty) {
+      throw const AppFailure(LocaleKeys.photoUpdateError,
+          code: 'invalid_avatar');
+    }
+    final path =
+        '$userId/profile-${DateTime.now().millisecondsSinceEpoch}.jpg';
+    await _supabase.storage.from('avatars').uploadBinary(
+          path,
+          bytes,
+          fileOptions:
+              const FileOptions(upsert: true, contentType: 'image/jpeg'),
+        );
+    final url = _supabase.storage.from('avatars').getPublicUrl(path);
+    await _supabase.from('profiles').update({
+      'avatar_url': url,
+      'updated_at': DateTime.now().toUtc().toIso8601String(),
+    }).eq('id', userId);
+    return url;
   }
 
   Future<UserPreferences> getUserPreferences() async {

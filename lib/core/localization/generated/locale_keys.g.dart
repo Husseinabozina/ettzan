@@ -55,6 +55,7 @@ abstract class LocaleKeys {
   static const certifiedLifeCoach = 'certifiedLifeCoach';
   static const changeFilterOrReturnLater = 'changeFilterOrReturnLater';
   static const changePassword = 'changePassword';
+  static const changePhoto = 'changePhoto';
   static const chatLoadError = 'chatLoadError';
   static const chatLoadErrorDescription = 'chatLoadErrorDescription';
   static const chatSendError = 'chatSendError';
@@ -64,6 +65,7 @@ abstract class LocaleKeys {
   static const checkSupabaseConnection = 'checkSupabaseConnection';
   static const chooseCoachFromList = 'chooseCoachFromList';
   static const chooseDate = 'chooseDate';
+  static const chooseFromGallery = 'chooseFromGallery';
   static const chooseNewTime = 'chooseNewTime';
   static const choosePlan = 'choosePlan';
   static const chooseTime = 'chooseTime';
@@ -297,6 +299,8 @@ abstract class LocaleKeys {
   static const paymentPending = 'paymentPending';
   static const pending = 'pending';
   static const persistence = 'persistence';
+  static const photoUpdateError = 'photoUpdateError';
+  static const photoUpdateSuccess = 'photoUpdateSuccess';
   static const planAvailableFromSupabase = 'planAvailableFromSupabase';
   static const planEdit = 'planEdit';
   static const planSelected = 'planSelected';
@@ -384,6 +388,7 @@ abstract class LocaleKeys {
   static const tagGratitude = 'tagGratitude';
   static const tagMotivation = 'tagMotivation';
   static const tagline = 'tagline';
+  static const takePhoto = 'takePhoto';
   static const targetDate = 'targetDate';
   static const targetDatePast = 'targetDatePast';
   static const targetDateRemaining = 'targetDateRemaining';

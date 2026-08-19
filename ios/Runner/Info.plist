@@ -20,6 +20,10 @@
 		<string>$(FLUTTER_BUILD_NAME)</string>
 		<key>CFBundleSignature</key>
 		<string>????</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>يستخدم اتزان الوصول إلى الاستوديو لاختيار صورتك الشخصية.</string>
+		<key>NSCameraUsageDescription</key>
+		<string>يستخدم اتزان الكاميرا لالتقاط صورتك الشخصية.</string>
 		<key>CFBundleURLTypes</key>
 		<array>
 			<dict>

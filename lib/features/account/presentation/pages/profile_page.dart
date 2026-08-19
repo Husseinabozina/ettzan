@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:etzan_life_coaching/core/data/etzan_backend_repository.dart';
 import 'package:etzan_life_coaching/core/design_system/app_colors.dart';
 import 'package:etzan_life_coaching/core/design_system/app_tokens.dart';
@@ -24,11 +25,70 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   late Future<ProfileOverview> _future =
       getIt<EtzanBackendRepository>().getProfileOverview();
+  bool _savingPhoto = false;
 
   void _reload() {
     setState(() {
       _future = getIt<EtzanBackendRepository>().getProfileOverview();
     });
+  }
+
+  Future<void> _changePhoto() async {
+    final source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo_library_outlined,
+                  color: AppColors.primary),
+              title: Text(LocaleKeys.chooseFromGallery.tr(context: context)),
+              onTap: () =>
+                  Navigator.of(context).pop(ImageSource.gallery),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_camera_outlined,
+                  color: AppColors.primary),
+              title: Text(LocaleKeys.takePhoto.tr(context: context)),
+              onTap: () => Navigator.of(context).pop(ImageSource.camera),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (source == null || !mounted) return;
+
+    final picked = await ImagePicker().pickImage(
+      source: source,
+      maxWidth: 1024,
+      maxHeight: 1024,
+      imageQuality: 82,
+    );
+    if (picked == null || !mounted) return;
+
+    setState(() => _savingPhoto = true);
+    try {
+      final bytes = await picked.readAsBytes();
+      await getIt<EtzanBackendRepository>().changeProfileAvatar(bytes);
+      _reload();
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              Text(LocaleKeys.photoUpdateSuccess.tr(context: context)),
+        ),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(LocaleKeys.photoUpdateError.tr(context: context)),
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _savingPhoto = false);
+    }
   }
 
   Future<void> _editProfileName(ProfileOverview profile) async {
@@ -101,6 +161,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ProfileHeaderCard(
                 profile: profile,
                 onEdit: () => _editProfileName(profile),
+                onChangePhoto: _changePhoto,
+                savingPhoto: _savingPhoto,
               ),
               const SizedBox(height: AppSpacing.lg),
               EtzanSectionTitle(
