@@ -432,68 +432,73 @@ class EtzanSegmentedControl<T> extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadii.pill),
         border: Border.all(color: AppColors.divider),
       ),
-      child: Stack(
-        children: [
-          // Single pill thumb that slides between segments; AlignmentDirectional
-          // keeps it correct in both LTR and RTL.
-          if (count > 1)
-            AnimatedAlign(
-              duration: AppDurations.normal,
-              curve: Curves.easeOutCubic,
-              alignment: AlignmentDirectional(
-                -1 + 2 * selectedIndex / (count - 1),
-                0,
-              ),
-              child: FractionallySizedBox(
-                widthFactor: 1 / count,
-                heightFactor: 1,
-                child: IgnorePointer(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(AppRadii.pill),
-                      border: Border.all(color: AppColors.divider),
-                      boxShadow: AppShadows.card,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          // Labels + tap targets on top of the thumb.
-          Row(
-            children: entries.map((entry) {
-              final isSelected = entry.key == selected;
-              return Expanded(
-                child: Semantics(
-                  button: true,
-                  inMutuallyExclusiveGroup: true,
-                  selected: isSelected,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(AppRadii.pill),
-                    onTap: () => onChanged(entry.key),
-                    child: Padding(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 8, vertical: 11),
-                      child: Text(
-                        entry.value,
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              color: isSelected
-                                  ? AppColors.primaryDeep
-                                  : AppColors.inkMuted,
-                              fontWeight:
-                                  isSelected ? FontWeight.w800 : FontWeight.w600,
-                            ),
+      // The thumb is Positioned (doesn't affect size) while the labels Row
+      // sizes the stack, so it works inside unbounded-height scroll views.
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final segmentWidth = constraints.maxWidth / count;
+          return Stack(
+            children: [
+              if (count > 1)
+                AnimatedPositionedDirectional(
+                  duration: AppDurations.normal,
+                  curve: Curves.easeOutCubic,
+                  start: selectedIndex * segmentWidth,
+                  width: segmentWidth,
+                  top: 0,
+                  bottom: 0,
+                  child: IgnorePointer(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(AppRadii.pill),
+                        border: Border.all(color: AppColors.divider),
+                        boxShadow: AppShadows.card,
                       ),
                     ),
                   ),
                 ),
-              );
-            }).toList(),
-          ),
-        ],
+              // Labels + tap targets on top of the thumb.
+              Row(
+                children: entries.map((entry) {
+                  final isSelected = entry.key == selected;
+                  return Expanded(
+                    child: Semantics(
+                      button: true,
+                      inMutuallyExclusiveGroup: true,
+                      selected: isSelected,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(AppRadii.pill),
+                        onTap: () => onChanged(entry.key),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 11),
+                          child: Text(
+                            entry.value,
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(
+                                  color: isSelected
+                                      ? AppColors.primaryDeep
+                                      : AppColors.inkMuted,
+                                  fontWeight: isSelected
+                                      ? FontWeight.w800
+                                      : FontWeight.w600,
+                                ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
