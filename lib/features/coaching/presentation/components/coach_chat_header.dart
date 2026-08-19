@@ -9,12 +9,14 @@ class CoachChatHeader extends StatelessWidget {
     required this.coachName,
     required this.specialties,
     required this.onRefresh,
+    this.imageUrl,
     super.key,
   });
 
   final String coachName;
   final List<String> specialties;
   final VoidCallback onRefresh;
+  final String? imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class CoachChatHeader extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.md),
       child: Row(
         children: [
-          EtzanAvatar(name: coachName, online: true),
+          EtzanAvatar(name: coachName, online: true, imageUrl: imageUrl),
           const SizedBox(width: AppSpacing.md),
           Expanded(
             child: Column(

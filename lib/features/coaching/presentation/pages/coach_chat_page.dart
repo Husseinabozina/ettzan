@@ -189,6 +189,7 @@ class _CoachChatScreenState extends State<CoachChatScreen> {
               CoachChatHeader(
                 coachName: thread.coach.name,
                 specialties: thread.coach.specialties,
+                imageUrl: thread.coach.avatarUrl,
                 onRefresh: _reload,
               ),
               const SizedBox(height: AppSpacing.md),

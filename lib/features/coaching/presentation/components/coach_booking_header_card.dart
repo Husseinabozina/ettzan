@@ -15,7 +15,11 @@ class CoachBookingHeaderCard extends StatelessWidget {
     return EtzanCard(
       child: Row(
         children: [
-          EtzanAvatar(name: coach.name, online: true),
+          EtzanAvatar(
+            name: coach.name,
+            online: true,
+            imageUrl: coach.avatarUrl,
+          ),
           const SizedBox(width: AppSpacing.md),
           Expanded(
             child: Column(
