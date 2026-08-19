@@ -113,12 +113,14 @@ abstract class LocaleKeys {
   static const dayTuesday = 'dayTuesday';
   static const dayWednesday = 'dayWednesday';
   static const decreaseProgress = 'decreaseProgress';
+  static const deleteEntry = 'deleteEntry';
   static const deleteHabit = 'deleteHabit';
   static const deleteHabitConfirmBody = 'deleteHabitConfirmBody';
   static const deleteHabitConfirmTitle = 'deleteHabitConfirmTitle';
   static const discoverCoach = 'discoverCoach';
   static const done = 'done';
   static const durationMinutes = 'durationMinutes';
+  static const editEntry = 'editEntry';
   static const editHabit = 'editHabit';
   static const editName = 'editName';
   static const editProfile = 'editProfile';
@@ -210,6 +212,9 @@ abstract class LocaleKeys {
   static const journal = 'journal';
   static const journalBodyHint = 'journalBodyHint';
   static const journalBodyRequired = 'journalBodyRequired';
+  static const journalDeleteConfirmBody = 'journalDeleteConfirmBody';
+  static const journalDeleteConfirmTitle = 'journalDeleteConfirmTitle';
+  static const journalDeleteError = 'journalDeleteError';
   static const journalHome = 'journalHome';
   static const journalLoadError = 'journalLoadError';
   static const journalSaveError = 'journalSaveError';

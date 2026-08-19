@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:etzan_life_coaching/core/di/injection.dart';
+import 'package:etzan_life_coaching/core/data/etzan_backend_repository.dart';
 import 'package:etzan_life_coaching/core/navigation/app_routes.dart';
 
 import 'package:etzan_life_coaching/features/account/presentation/pages/about_page.dart';
@@ -112,7 +113,11 @@ abstract final class AppRouter {
 
       // Journal
       AppRoutes.journalHome => const JournalHomeScreen(),
-      AppRoutes.journalEntry => const JournalEntryScreen(),
+      AppRoutes.journalEntry => JournalEntryScreen(
+          entry: settings.arguments is JournalEntryItem
+              ? settings.arguments as JournalEntryItem
+              : null,
+        ),
       AppRoutes.progress => const ProgressAnalyticsScreen(),
 
       // Notifications

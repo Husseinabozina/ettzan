@@ -707,6 +707,26 @@ class EtzanBackendRepository {
     });
   }
 
+  Future<void> updateJournalEntry({
+    required String entryId,
+    required String body,
+    String? title,
+    required int mood,
+    List<String> tags = const [],
+  }) async {
+    await _supabase.from('journal_entries').update({
+      'title': title?.trim().isEmpty == true ? null : title?.trim(),
+      'body': body.trim(),
+      'mood': mood,
+      'tags': tags,
+      'updated_at': DateTime.now().toUtc().toIso8601String(),
+    }).eq('id', entryId);
+  }
+
+  Future<void> deleteJournalEntry(String entryId) async {
+    await _supabase.from('journal_entries').delete().eq('id', entryId);
+  }
+
   Future<CoachChatThread> getOrCreateCoachChat() async {
     final userId = _userId;
     final coach = await _resolveChatCoach();

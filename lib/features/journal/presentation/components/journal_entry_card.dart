@@ -7,16 +7,19 @@ import 'package:etzan_life_coaching/features/journal/presentation/components/jou
 class JournalEntryCard extends StatelessWidget {
   const JournalEntryCard({
     required this.entry,
+    this.onTap,
     super.key,
   });
 
   final JournalEntryItem entry;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final moodColor = journalMoodColor(entry.mood);
 
     return EtzanCard(
+      onTap: onTap,
       child: Row(
         children: [
           Container(

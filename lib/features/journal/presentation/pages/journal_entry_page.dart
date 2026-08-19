@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:etzan_life_coaching/core/data/etzan_backend_repository.dart';
+import 'package:etzan_life_coaching/core/design_system/app_colors.dart';
 import 'package:etzan_life_coaching/core/design_system/app_tokens.dart';
 import 'package:etzan_life_coaching/core/di/injection.dart';
 import 'package:etzan_life_coaching/core/localization/generated/locale_keys.g.dart';
@@ -9,7 +10,9 @@ import 'package:etzan_life_coaching/features/journal/presentation/components/jou
 import 'package:etzan_life_coaching/features/journal/presentation/components/journal_mood_selector.dart';
 
 class JournalEntryScreen extends StatefulWidget {
-  const JournalEntryScreen({super.key});
+  const JournalEntryScreen({this.entry, super.key});
+
+  final JournalEntryItem? entry;
 
   @override
   State<JournalEntryScreen> createState() => _JournalEntryScreenState();
@@ -24,11 +27,27 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
   bool _saving = false;
 
   @override
+  void initState() {
+    super.initState();
+    final entry = widget.entry;
+    if (entry != null) {
+      _titleController.text = entry.title == 'بدون عنوان' ? '' : entry.title;
+      _bodyController.text = entry.body;
+      _moodIndex = (entry.mood - 1).clamp(0, 4);
+      _tags
+        ..clear()
+        ..addAll(entry.tags);
+    }
+  }
+
+  @override
   void dispose() {
     _titleController.dispose();
     _bodyController.dispose();
     super.dispose();
   }
+
+  bool get _isEditing => widget.entry != null;
 
   Future<void> _save() async {
     final body = _bodyController.text.trim();
@@ -45,12 +64,23 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
 
     setState(() => _saving = true);
     try {
-      await getIt<EtzanBackendRepository>().createJournalEntry(
-        title: _titleController.text.trim(),
-        body: body,
-        mood: _moodIndex + 1,
-        tags: _tags.toList(growable: false),
-      );
+      final repository = getIt<EtzanBackendRepository>();
+      if (_isEditing) {
+        await repository.updateJournalEntry(
+          entryId: widget.entry!.id,
+          title: _titleController.text.trim(),
+          body: body,
+          mood: _moodIndex + 1,
+          tags: _tags.toList(growable: false),
+        );
+      } else {
+        await repository.createJournalEntry(
+          title: _titleController.text.trim(),
+          body: body,
+          mood: _moodIndex + 1,
+          tags: _tags.toList(growable: false),
+        );
+      }
       if (!mounted) return;
       Navigator.of(context).pop();
     } catch (_) {
@@ -60,6 +90,48 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
           content: Text(
             LocaleKeys.journalSaveError.tr(context: context),
           ),
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
+
+  Future<void> _delete() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          LocaleKeys.journalDeleteConfirmTitle.tr(context: context),
+        ),
+        content:
+            Text(LocaleKeys.journalDeleteConfirmBody.tr(context: context)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(LocaleKeys.cancel.tr(context: context)),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: AppColors.danger),
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(LocaleKeys.deleteEntry.tr(context: context)),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+
+    setState(() => _saving = true);
+    try {
+      await getIt<EtzanBackendRepository>()
+          .deleteJournalEntry(widget.entry!.id);
+      if (!mounted) return;
+      Navigator.of(context).pop();
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(LocaleKeys.journalDeleteError.tr(context: context)),
         ),
       );
     } finally {
@@ -80,7 +152,18 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
   @override
   Widget build(BuildContext context) {
     return EtzanPage(
-      title: LocaleKeys.newEntry.tr(context: context),
+      title: _isEditing
+          ? LocaleKeys.editEntry.tr(context: context)
+          : LocaleKeys.newEntry.tr(context: context),
+      actions: [
+        if (_isEditing)
+          IconButton(
+            tooltip: LocaleKeys.deleteEntry.tr(context: context),
+            onPressed: _saving ? null : _delete,
+            icon: const Icon(Icons.delete_outline),
+            color: AppColors.danger,
+          ),
+      ],
       child: ListView(
         children: [
           EtzanSectionTitle(

@@ -59,6 +59,13 @@ class _JournalHomeScreenState extends State<JournalHomeScreen> {
     if (mounted) _reload();
   }
 
+  Future<void> _openEntry(JournalEntryItem entry) async {
+    await Navigator.of(
+      context,
+    ).pushNamed(AppRoutes.journalEntry, arguments: entry);
+    if (mounted) _reload();
+  }
+
   @override
   Widget build(BuildContext context) {
     return EtzanShell(
@@ -133,7 +140,10 @@ class _JournalHomeScreenState extends State<JournalHomeScreen> {
                 ...entries.map(
                   (entry) => Padding(
                     padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-                    child: JournalEntryCard(entry: entry),
+                    child: JournalEntryCard(
+                      entry: entry,
+                      onTap: () => _openEntry(entry),
+                    ),
                   ),
                 ),
               const SizedBox(height: AppSpacing.lg),
@@ -149,11 +159,6 @@ class _JournalHomeScreenState extends State<JournalHomeScreen> {
                     const SizedBox(height: AppSpacing.sm),
                     Text(
                       LocaleKeys.writingPromptQuestion.tr(context: context),
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    EtzanPrimaryButton(
-                      label: LocaleKeys.writeNow.tr(context: context),
-                      onPressed: _openNewEntry,
                     ),
                   ],
                 ),
