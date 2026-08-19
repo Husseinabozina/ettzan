@@ -17,7 +17,12 @@ class CoachProfileSummaryCard extends StatelessWidget {
       gradient: AppColors.calmGradient,
       child: Column(
         children: [
-          EtzanAvatar(name: coach.name, size: 104, online: true),
+          EtzanAvatar(
+            name: coach.name,
+            size: 104,
+            online: true,
+            imageUrl: coach.avatarUrl,
+          ),
           const SizedBox(height: AppSpacing.md),
           Text(
             LocaleKeys.coachNameLabel.tr(

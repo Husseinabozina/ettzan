@@ -30,7 +30,12 @@ class CoachCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              EtzanAvatar(name: coach.name, size: 64, online: true),
+              EtzanAvatar(
+                name: coach.name,
+                size: 64,
+                online: true,
+                imageUrl: coach.avatarUrl,
+              ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(

@@ -298,11 +298,12 @@ class EtzanProgressRing extends StatelessWidget {
 
 class EtzanAvatar extends StatelessWidget {
   const EtzanAvatar(
-      {required this.name, this.size = 52, this.online = false, super.key});
+      {required this.name, this.size = 52, this.online = false, this.imageUrl, super.key});
 
   final String name;
   final double size;
   final bool online;
+  final String? imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -313,25 +314,36 @@ class EtzanAvatar extends StatelessWidget {
         .take(2)
         .map((e) => e[0])
         .join();
+    final initials = Text(
+      letters,
+      style: TextStyle(
+          fontSize: size * .29,
+          fontWeight: FontWeight.w800,
+          color: AppColors.primaryDark),
+    );
     return Stack(
       children: [
         Container(
           width: size,
           height: size,
           decoration: BoxDecoration(
-            gradient: AppColors.calmGradient,
+            gradient: imageUrl == null ? AppColors.calmGradient : null,
+            color: imageUrl == null ? null : AppColors.mintSoft,
             shape: BoxShape.circle,
             border: Border.all(color: Colors.white, width: 3),
             boxShadow: AppShadows.card,
           ),
           alignment: Alignment.center,
-          child: Text(
-            letters,
-            style: TextStyle(
-                fontSize: size * .29,
-                fontWeight: FontWeight.w800,
-                color: AppColors.primaryDark),
-          ),
+          clipBehavior: Clip.antiAlias,
+          child: imageUrl == null
+              ? initials
+              : Image.network(
+                  imageUrl!,
+                  width: size,
+                  height: size,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => initials,
+                ),
         ),
         if (online)
           PositionedDirectional(
