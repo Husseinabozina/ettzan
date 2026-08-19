@@ -420,6 +420,11 @@ class EtzanSegmentedControl<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final entries = items.entries.toList();
+    final count = entries.length;
+    final selectedIndex =
+        entries.indexWhere((entry) => entry.key == selected);
+
     return Container(
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
@@ -427,42 +432,68 @@ class EtzanSegmentedControl<T> extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadii.pill),
         border: Border.all(color: AppColors.divider),
       ),
-      child: Row(
-        children: items.entries.map((entry) {
-          final isSelected = entry.key == selected;
-          return Expanded(
-            child: AnimatedContainer(
-              duration: AppDurations.fast,
+      child: Stack(
+        children: [
+          // Single pill thumb that slides between segments; AlignmentDirectional
+          // keeps it correct in both LTR and RTL.
+          if (count > 1)
+            AnimatedAlign(
+              duration: AppDurations.normal,
               curve: Curves.easeOutCubic,
-              decoration: BoxDecoration(
-                color: isSelected ? AppColors.surface : Colors.transparent,
-                borderRadius: BorderRadius.circular(AppRadii.pill),
-                boxShadow: isSelected ? AppShadows.card : null,
+              alignment: AlignmentDirectional(
+                -1 + 2 * selectedIndex / (count - 1),
+                0,
               ),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(AppRadii.pill),
-                onTap: () => onChanged(entry.key),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 11),
-                  child: Text(
-                    entry.value,
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          color: isSelected
-                              ? AppColors.primaryDeep
-                              : AppColors.inkMuted,
-                          fontWeight:
-                              isSelected ? FontWeight.w800 : FontWeight.w600,
-                        ),
+              child: FractionallySizedBox(
+                widthFactor: 1 / count,
+                heightFactor: 1,
+                child: IgnorePointer(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(AppRadii.pill),
+                      border: Border.all(color: AppColors.divider),
+                      boxShadow: AppShadows.card,
+                    ),
                   ),
                 ),
               ),
             ),
-          );
-        }).toList(),
+          // Labels + tap targets on top of the thumb.
+          Row(
+            children: entries.map((entry) {
+              final isSelected = entry.key == selected;
+              return Expanded(
+                child: Semantics(
+                  button: true,
+                  inMutuallyExclusiveGroup: true,
+                  selected: isSelected,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(AppRadii.pill),
+                    onTap: () => onChanged(entry.key),
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 8, vertical: 11),
+                      child: Text(
+                        entry.value,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                              color: isSelected
+                                  ? AppColors.primaryDeep
+                                  : AppColors.inkMuted,
+                              fontWeight:
+                                  isSelected ? FontWeight.w800 : FontWeight.w600,
+                            ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ],
       ),
     );
   }
