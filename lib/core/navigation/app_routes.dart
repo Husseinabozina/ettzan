@@ -11,6 +11,7 @@ abstract final class AppRoutes {
   static const upcomingSessions = '/sessions';
   static const goalsOverview = '/growth/goals';
   static const createGoal = '/growth/goals/create';
+  static const completedGoals = '/growth/goals/completed';
   static const habits = '/growth/habits';
   static const dailyPlan = '/growth/daily-plan';
   static const calendar = '/growth/calendar';

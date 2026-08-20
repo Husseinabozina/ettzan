@@ -190,28 +190,68 @@ class _GoalsOverviewScreenState extends State<GoalsOverviewScreen> {
                       .toList(),
                 ),
               const SizedBox(height: AppSpacing.lg),
-              if (completedGoals.isNotEmpty) ...[
-                EtzanSectionTitle(
-                  title: LocaleKeys.completedGoals.tr(context: context),
+              EtzanCard(
+                gradient: AppColors.lavenderGradient,
+                padding: const EdgeInsets.all(AppSpacing.md),
+                onTap: () => Navigator.of(context).pushNamed(
+                  AppRoutes.completedGoals,
                 ),
-                const SizedBox(height: AppSpacing.sm),
-                AdaptiveGrid(
-                  phone: 1,
-                  tablet: 2,
-                  desktop: 3,
-                  children: completedGoals
-                      .map(
-                        (goal) => GoalCard(
-                          goal: goal,
-                          isUpdating: false,
-                          readOnly: true,
-                          onProgressChanged: (_) {},
-                        ),
-                      )
-                      .toList(),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 46,
+                      height: 46,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: .6),
+                        borderRadius: BorderRadius.circular(AppRadii.md),
+                      ),
+                      child: const Icon(
+                        Icons.emoji_events_outlined,
+                        color: AppColors.primaryDeep,
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.md),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            LocaleKeys.completedGoals.tr(context: context),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  color: AppColors.primaryDeep,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                          ),
+                          Text(
+                            completedGoals.isEmpty
+                                ? LocaleKeys.noCompletedGoals.tr(
+                                    context: context,
+                                  )
+                                : LocaleKeys.completedGoalsCount.tr(
+                                    context: context,
+                                    namedArgs: {
+                                      'count': '${completedGoals.length}',
+                                    },
+                                  ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(color: AppColors.inkMuted),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Icon(
+                      Icons.chevron_right,
+                      color: AppColors.inkSubtle,
+                    ),
+                  ],
                 ),
-                const SizedBox(height: AppSpacing.lg),
-              ],
+              ),
+              const SizedBox(height: AppSpacing.lg),
               EtzanCard(
                 gradient: AppColors.calmGradient,
                 child: Row(

@@ -81,6 +81,7 @@ abstract class LocaleKeys {
   static const completeGoogleSignIn = 'completeGoogleSignIn';
   static const completed = 'completed';
   static const completedGoals = 'completedGoals';
+  static const completedGoalsCount = 'completedGoalsCount';
   static const confirm = 'confirm';
   static const confirmBooking = 'confirmBooking';
   static const confirmPassword = 'confirmPassword';
@@ -261,6 +262,8 @@ abstract class LocaleKeys {
   static const noCoach = 'noCoach';
   static const noCoachAvailableForChat = 'noCoachAvailableForChat';
   static const noCoaches = 'noCoaches';
+  static const noCompletedGoals = 'noCompletedGoals';
+  static const noCompletedGoalsDescription = 'noCompletedGoalsDescription';
   static const noHabits = 'noHabits';
   static const noHabitsDescription = 'noHabitsDescription';
   static const noJournalEntries = 'noJournalEntries';

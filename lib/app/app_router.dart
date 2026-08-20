@@ -37,6 +37,7 @@ import 'package:etzan_life_coaching/features/dashboard/presentation/pages/guest_
 import 'package:etzan_life_coaching/features/dashboard/presentation/pages/home_dashboard_page.dart';
 
 import 'package:etzan_life_coaching/features/growth/presentation/pages/calendar_page.dart';
+import 'package:etzan_life_coaching/features/growth/presentation/pages/completed_goals_page.dart';
 import 'package:etzan_life_coaching/features/growth/presentation/pages/create_goal_page.dart';
 import 'package:etzan_life_coaching/features/growth/presentation/pages/daily_plan_page.dart';
 import 'package:etzan_life_coaching/features/growth/presentation/pages/goals_overview_page.dart';
@@ -107,6 +108,8 @@ abstract final class AppRouter {
       // Growth
       AppRoutes.goalsOverview => const GoalsOverviewScreen(),
       AppRoutes.createGoal => const CreateGoalScreen(),
+
+      AppRoutes.completedGoals => const CompletedGoalsScreen(),
       AppRoutes.habits => const HabitsScreen(),
       AppRoutes.dailyPlan => const DailyPlanScreen(),
       AppRoutes.calendar => const CalendarScreen(),
