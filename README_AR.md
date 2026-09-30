@@ -1,4 +1,4 @@
-# اتزان — Flutter Life Coaching App
+# etzan — Flutter Life Coaching App
 
 نسخة 1.1 تتضمن إعادة تصميم فعلية للواجهات الرئيسية، رسومات SVG أصلية، شعار اتزان، خط Tajawal، Icon System خاص، ودعم RTL/LTR وResponsive.
 

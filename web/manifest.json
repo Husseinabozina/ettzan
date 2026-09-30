@@ -1,6 +1,6 @@
 {
-    "name": "etzan_flutter",
-    "short_name": "etzan_flutter",
+    "name": "etzan",
+    "short_name": "etzan",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
