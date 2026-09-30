@@ -1,4 +1,6 @@
-# etzan — Life Coaching Flutter App
+# etzan
+
+Repository name: `ettzan` — Flutter Life Coaching App.
 
 A complete Flutter UI starter based on the 25-screen Etzan life-coaching concept. The project is designed as a scalable product foundation rather than a collection of disconnected mockups.
 
