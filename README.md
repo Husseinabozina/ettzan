@@ -158,18 +158,31 @@ flutter test
 
 Earlier design reference boards remain in `design_reference/`; the gallery uses actual app screenshots.
 
-## Showcase website
+## Project showcase
 
-The site lives in **this same repository**, under `docs/showcase/`. `.github/workflows/showcase-pages.yml` publishes only that directory to GitHub Pages on updates to `main`. No Flutter build or dependency installation is part of website deployment.
+**[Explore the Etzan showcase ↗](https://husseinabozina.github.io/ettzan/)**
+
+Browse real app screenshots, follow the main user journeys, and explore the Flutter architecture. The showcase is a **portfolio website**, not a browser-based version of the mobile app. To try the Android app, use the [APK download](#try-the-android-app) above.
+
+<details>
+<summary><strong>Showcase development notes</strong></summary>
+
+The static website is located in `docs/showcase/`. To preview it on your own computer, run this command from the repository root:
 
 ```bash
 python3 -m http.server 4174 --directory docs/showcase
 ```
 
-Open `http://localhost:4174`. On macOS, regenerate the poster exports with:
+Then visit [http://localhost:4174](http://localhost:4174) **on that same computer**. This is a local preview address, **not a public demo link**.
+
+If you change the screenshots or branded gallery artwork, you can regenerate the showcase posters and README cover **on macOS** using the Swift/AppKit export script:
 
 ```bash
 swift tools/generate-showcase.swift
 ```
+
+This export step is optional for viewing the website and is not needed to run the Flutter app. The [GitHub Pages workflow](.github/workflows/showcase-pages.yml) publishes `docs/showcase/` when that directory changes on `main`.
+
+</details>
 
 Built by [Hussein Abozina](https://github.com/Husseinabozina).
