@@ -4,6 +4,7 @@
 <p align="center">Coaching discovery · Goals & habits · Daily planning · Journaling</p>
 <p align="center">
 <a href="https://husseinabozina.github.io/ettzan/">Explore the showcase</a> ·
+<a href="https://github.com/Husseinabozina/ettzan/releases/download/v1.1.0-showcase/etzan-1.1.0-showcase.apk">Download Android APK</a> ·
 <a href="#app-gallery">App gallery</a> ·
 <a href="#engineering-highlights">Engineering</a> ·
 <a href="#run-locally">Run locally</a>
@@ -110,6 +111,18 @@ supabase/                # Backend notes and supporting SQL
 test/                    # Mapper, widget, and smoke-test sources
 ```
 
+## Try the Android app
+
+[**Download Etzan 1.1.0 showcase APK**](https://github.com/Husseinabozina/ettzan/releases/download/v1.1.0-showcase/etzan-1.1.0-showcase.apk) · [Release notes & SHA-256 checksum](https://github.com/Husseinabozina/ettzan/releases/tag/v1.1.0-showcase)
+
+This is a release-mode **portfolio prerelease**, signed with the project's existing **debug certificate**, not a Google Play production release. Version: **1.1.0 (build 2)**. The APK is hosted as a GitHub Release asset, not committed to source control.
+
+Requires **Android 7.0 (API 24) or newer**. The universal APK is approximately **64.8 MB** and includes ARM64, ARMv7, and x86_64. To rebuild from the release source, run `flutter build apk --release` with the pinned dependencies.
+
+Android may request permission to install from your browser/file manager. If you already have an installation signed with another certificate, Android will not accept this as an update. Preserve any existing data before considering removal of another installation.
+
+Guest exploration and account-based journeys use the configured backend; internet access and backend availability apply. This release has Android INTERNET permission in the main manifest. Package metadata/signature were inspected; it was not runtime-tested on a physical Android device during this release workflow.
+
 ## Run locally
 
 Use a Flutter SDK compatible with the pinned dependencies. Dart constraint: **>=3.6.0 <4.0.0**. Flutter **3.38.5 / Dart 3.10.4** was used during local preparation. Android and iOS platform directories are already included.
@@ -136,8 +149,8 @@ flutter test
 - This is a life-coaching / personal-development portfolio project, not a claim of a licensed clinical treatment service.
 - Subscription screens and plans are present; payment-provider integration is pending.
 - The website is a static showcase, **not** a browser build of the Flutter app, and does not collect account details.
-- No downloadable APK or published-store link is supplied in this showcase yet.
-- This showcase revision changes documentation, images, and website assets; it does not re-test or alter the mobile app.
+- An Android showcase APK is available from Releases. No published-store listing is provided.
+- The Android release also includes the network permission required by the existing backend integration. No backend schema or iOS configuration was changed for this release.
 
 ## Project documentation
 

@@ -24,6 +24,9 @@ try {
     assert.deepEqual(result.broken, []);
     assert.equal(result.withoutAlt, 0);
     assert.ok(result.count >= 8);
+    const apkLink = page.locator('.apk-download');
+    assert.equal(await apkLink.count(), 1);
+    assert.equal(await apkLink.getAttribute('href'), 'https://github.com/Husseinabozina/ettzan/releases/download/v1.1.0-showcase/etzan-1.1.0-showcase.apk');
     console.log(JSON.stringify({ width, ...result }));
     if (width === 1440 || width === 390) await page.screenshot({ path: `/tmp/etzan-showcase-${width}.png` });
   }
